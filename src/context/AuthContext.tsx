@@ -62,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      // Fix: Use the correct table name 'profiles' which exists in the Database type
       const { data, error } = await supabase
         .from('profiles')
         .select('first_name, last_name')
