@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="bg-tweet-purple rounded-full p-1">
             <Twitter className="w-4 h-4 text-white" />
           </div>
-          <h3 className="text-lg font-semibold text-tweet-purple">TweetWizard</h3>
+          <h3 className="text-lg font-semibold text-tweet-purple">TweetMatters</h3>
         </div>
         
         <p className="text-sm text-muted-foreground">
