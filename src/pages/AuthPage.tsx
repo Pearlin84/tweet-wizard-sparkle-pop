@@ -176,7 +176,7 @@ const AuthPage = () => {
         </div>
         
         <h1 className="mb-8 text-center text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
-          Welcome to TweetMetry
+          Welcome to TweetMatters
         </h1>
         
         <Tabs
