@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import TweetGeneratorForm from './TweetGeneratorForm';
 import TweetResultsList from './TweetResultsList';
 import { generateTweets } from '../utils/tweetGenerator';
