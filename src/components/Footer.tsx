@@ -17,7 +17,7 @@ const Footer = () => {
         </p>
         
         <div className="mt-4 text-xs text-muted-foreground">
-          © 2025 TweetMetry. A product of LumeMetrics. All rights reserved.
+          © 2025 TweetMatters. A product of LumeMetrics. All rights reserved.
         </div>
       </div>
     </footer>
