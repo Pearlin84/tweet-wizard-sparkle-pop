@@ -1,14 +1,17 @@
 
-// This function uses Google's Generative AI (Gemini) to generate tweets
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { ChatGoogleGenerativeAI } from "https://esm.sh/@langchain/google-genai@0.1.7";
 
-// CORS headers for browser requests
+// Get the Google API key from Supabase secrets
+const googleApiKey = Deno.env.get('GOOGLE_API_KEY');
+
+// Define CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Handle tweet generation
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -16,73 +19,102 @@ serve(async (req) => {
   }
 
   try {
-    // Get the Google API key from environment variables
-    const apiKey = Deno.env.get('GOOGLE_API_KEY');
-    if (!apiKey) {
-      throw new Error("Google API Key not found in environment variables");
-    }
-
-    // Parse request body to get topic and count
+    // Parse request body
     const { topic, count } = await req.json();
-    if (!topic || !count) {
-      throw new Error("Missing required parameters: topic and count");
+    
+    console.log(`Generating ${count} tweets about "${topic}" with Gemini`);
+
+    if (!googleApiKey) {
+      throw new Error('GOOGLE_API_KEY is not set in Supabase secrets');
     }
 
-    console.log(`Generating ${count} tweets about "${topic}"`);
+    // Create the prompt for Gemini
+    const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English. Each tweet should:
+    - Be unique and different from others
+    - Include relevant hashtags
+    - Be engaging and shareable
+    - Be formatted as a numbered list
+    - Not exceed 280 characters
+    - Not include the number in the actual tweet content
+    
+    Format: 
+    1. [First tweet content]
+    2. [Second tweet content]
+    etc.`;
 
-    // Initialize the Gemini model
-    const model = new ChatGoogleGenerativeAI({
-      apiKey,
-      modelName: "gemini-2.0-flash", // Using Gemini 2.0 Flash as requested
+    // Make request to Google Gemini API
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': googleApiKey,
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
+        },
+      }),
     });
 
-    // Create and send the prompt
-    const prompt = `Give me ${count} tweets on ${topic} in English.`;
-    const response = await model.invoke([
-      { 
-        type: "human", 
-        text: prompt 
-      }
-    ]);
+    const data = await response.json();
+    
+    if (!response.ok) {
+      console.error('Gemini API error:', data);
+      throw new Error(`Gemini API error: ${data.error?.message || 'Unknown error'}`);
+    }
 
-    // Process the response to extract tweets
-    const content = response.text;
-    console.log("Raw response from Gemini:", content);
-
-    // Parse numbered tweets from the content
-    // Split by numbered list entries and filter empty lines
-    const tweets = content
-      .split(/\d+\.\s+/) // Split by numbered list format
-      .filter(tweet => tweet.trim().length > 0)
-      .map(tweet => tweet.trim())
-      .slice(0, count); // Ensure we return exactly the requested count
-
+    // Extract tweets from the response
+    const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    console.log('Raw response from Gemini:', contentText);
+    
+    // Parse the numbered list of tweets
+    const tweets = contentText
+      .split(/\d+\.\s+/) // Split by numbers followed by dot and space
+      .filter(tweet => tweet.trim().length > 0) // Remove empty entries
+      .map(tweet => tweet.trim()) // Clean up whitespace
+      .filter(tweet => tweet.length <= 280) // Make sure tweets don't exceed 280 chars
+      .slice(0, count); // Limit to requested count
+    
     console.log(`Successfully generated ${tweets.length} tweets`);
 
-    // Return the generated tweets
     return new Response(
-      JSON.stringify({ tweets }),
-      { 
-        headers: { 
+      JSON.stringify({ 
+        tweets,
+        success: true
+      }),
+      {
+        headers: {
           ...corsHeaders,
-          'Content-Type': 'application/json' 
-        } 
+          'Content-Type': 'application/json',
+        },
       }
     );
   } catch (error) {
-    console.error("Error generating tweets:", error);
+    console.error('Error in generate-tweets function:', error);
     
-    // Return a proper error response
     return new Response(
       JSON.stringify({ 
-        error: error.message || "Failed to generate tweets",
+        error: error.message, 
+        success: false 
       }),
-      { 
+      {
         status: 500,
-        headers: { 
+        headers: {
           ...corsHeaders,
-          'Content-Type': 'application/json' 
-        } 
+          'Content-Type': 'application/json',
+        },
       }
     );
   }
