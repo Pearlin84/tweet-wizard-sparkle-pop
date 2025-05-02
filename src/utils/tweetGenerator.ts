@@ -1,94 +1,30 @@
-
-import { PromptTemplate } from "@langchain/core/prompts";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { supabase } from "../integrations/supabase/client";
 import { TweetData, GenerationOptions } from "../types/tweet";
-
-// Initialize Gemini model with API key
-const initializeGeminiModel = () => {
-  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-  
-  if (!apiKey) {
-    throw new Error("Google API Key not found. Please set VITE_GOOGLE_API_KEY in your environment variables.");
-  }
-  
-  return new ChatGoogleGenerativeAI({
-    apiKey,
-    modelName: "gemini-1.5-flash-latest", // Using gemini-1.5-flash-latest as it's supported in the current integration
-  });
-};
-
-// Create prompt template for generating tweets
-const createPromptTemplate = () => {
-  return new PromptTemplate({
-    template: "Give me {number} tweets on {topic} in English.",
-    inputVariables: ["number", "topic"],
-  });
-};
 
 export const generateTweets = async (topic: string, count: number): Promise<string[]> => {
   try {
-    // If API key is not set, fall back to mock implementation
-    if (!import.meta.env.VITE_GOOGLE_API_KEY) {
-      console.warn("Using mock tweet generation because API key is not set");
-      return generateMockTweets(topic, count);
-    }
+    console.log(`Requesting ${count} tweets about "${topic}" from Edge Function`);
     
-    const geminiModel = initializeGeminiModel();
-    const promptTemplate = createPromptTemplate();
-    
-    // Use the chain approach with the pipe operator (|)
-    const chain = promptTemplate.pipe(geminiModel);
-    
-    // Call the chain with the input parameters
-    const response = await chain.invoke({
-      number: count,
-      topic: topic
+    // Call the Supabase Edge Function
+    const { data, error } = await supabase.functions.invoke('generate-tweets', {
+      body: { topic, count }
     });
     
-    // Extract and parse tweets from the response
-    const content = response.content;
-    let tweetText = '';
-    
-    // Handle different response content formats
-    if (typeof content === 'string') {
-      tweetText = content;
-    } else if (Array.isArray(content)) {
-      // For multi-part responses, join all text parts
-      tweetText = content
-        .filter(item => typeof item === 'object')
-        .map(item => {
-          // Check various possible properties where text content might be found
-          if ('text' in item) {
-            return item.text;
-          } else if ('value' in item) {
-            return item.value;
-          } else if ('content' in item) {
-            return item.content;
-          } else {
-            // Try to stringify the object if none of the expected properties exist
-            try {
-              return JSON.stringify(item);
-            } catch {
-              return '';
-            }
-          }
-        })
-        .join('\n');
+    if (error) {
+      console.error("Supabase Edge Function error:", error);
+      throw new Error(`Error calling generate-tweets function: ${error.message}`);
     }
     
-    console.log("Response from Gemini API:", tweetText);
+    if (!data || !data.tweets || !Array.isArray(data.tweets)) {
+      console.error("Invalid response format:", data);
+      throw new Error("Invalid response format from tweet generation service");
+    }
     
-    // Split the content by numbered list entries and filter empty lines
-    const tweets = tweetText
-      .split(/\d+\.\s+/)
-      .filter(tweet => tweet.trim().length > 0)
-      .map(tweet => tweet.trim())
-      .slice(0, count); // Ensure we return exactly the requested count
-    
-    return tweets.length ? tweets : generateMockTweets(topic, count);
+    console.log(`Successfully received ${data.tweets.length} tweets from Edge Function`);
+    return data.tweets;
   } catch (error) {
     console.error("Error generating tweets:", error);
-    // Fallback to mock implementation if API call fails
+    // Fallback to mock implementation if the edge function fails
     return generateMockTweets(topic, count);
   }
 };

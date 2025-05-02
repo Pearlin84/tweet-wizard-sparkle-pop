@@ -14,17 +14,18 @@ const TweetGenerator = () => {
   const handleGenerateTweets = async (topic: string, tweetCount: number) => {
     try {
       setIsLoading(true);
-      // In a production app with Supabase, we would:
-      // 1. Check authentication status
-      // 2. Include user_id in requests
-      // 3. Implement proper error logging
-      // 4. Implement proper data validation
+      toast({
+        title: "Generating tweets",
+        description: `Working on ${tweetCount} tweets about "${topic}"...`,
+      });
+      
       const generatedTweets = await generateTweets(topic, tweetCount);
       setTweets(generatedTweets);
       setHasGenerated(true);
+      
       toast({
         title: "Tweets generated!",
-        description: `We've created ${generatedTweets.length} viral tweets for your topic`,
+        description: `We've created ${generatedTweets.length} viral tweets using Gemini AI`,
       });
     } catch (error) {
       console.error('Error generating tweets:', error);
