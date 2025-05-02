@@ -33,7 +33,7 @@ const Header = () => {
             <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm animate-pulse-light -z-10"></div>
           </div>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
-            TweetMetry
+            TweetMatters
           </h1>
         </div>
         
