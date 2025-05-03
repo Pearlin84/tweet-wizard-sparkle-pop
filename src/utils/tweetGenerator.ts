@@ -42,71 +42,71 @@ const generateMockTweets = (topic: string, count: number, tone: string = "profes
   switch (tone.toLowerCase()) {
     case "professional":
       defaultFormats = [
-        `New research on ${topic} reveals significant implications for industry leaders. Key takeaways include improved efficiency and strategic advantages. #${topic.replace(/\s+/g, '')} #ProfessionalInsights`,
-        `Just published: "The Complete Guide to ${topic}" - Essential reading for professionals looking to stay ahead of the curve in today's competitive landscape. #${topic.replace(/\s+/g, '')}`,
-        `5 evidence-based strategies to optimize ${topic}: 1) Data-driven approach 2) Methodical implementation 3) Continuous evaluation 4) Stakeholder feedback 5) Iterative improvement #${topic.replace(/\s+/g, '')}`,
-        `The evolution of ${topic} represents a paradigm shift in how we approach business challenges. Here's why industry leaders are taking notice. #${topic.replace(/\s+/g, '')} #IndustryTrends`,
-        `Just released our comprehensive analysis on ${topic}. The findings demonstrate substantial ROI for organizations implementing best practices. #${topic.replace(/\s+/g, '')} #DataAnalysis`
+        `${topic} is up 35% in 2025! How will this shape your strategy? Share insights! #${topic.replace(/\s+/g, '')} #BusinessTrends`,
+        `Why is ${topic} critical for 2025? New report reveals key drivers. Check it out: [link] #${topic.replace(/\s+/g, '')} #IndustryInsights`,
+        `Top 3 ${topic} trends for 2025: 1) Innovation 2) Efficiency 3) Scale. Which matters most to you? #${topic.replace(/\s+/g, '')} #ProTips`,
+        `Experts predict ${topic} will transform markets by 2026. Agree or overhyped? #${topic.replace(/\s+/g, '')} #FutureOfBusiness`,
+        `Just dropped: ${topic} guide for professionals. Boost your ROI with these tips! #${topic.replace(/\s+/g, '')} #CareerGrowth [link]`
       ];
       break;
     
     case "casual":
       defaultFormats = [
-        `Hey! Just learned some cool stuff about ${topic}! Thought I'd share with y'all 😊 #${topic.replace(/\s+/g, '')} #JustSharing`,
-        `Anyone else super into ${topic} lately? I've been obsessed! Share your thoughts below 👇 #${topic.replace(/\s+/g, '')} #ChatWithMe`,
-        `So I tried this new approach to ${topic} and it's actually working pretty well! DM me if you want the details! #${topic.replace(/\s+/g, '')} #LifeHack`,
-        `${topic} has been on my mind lately. What's your take on it? Drop your thoughts in the replies! #${topic.replace(/\s+/g, '')} #JustThinking`,
-        `Weekend plans: Learning all about ${topic}! Anyone got good resources to recommend? #${topic.replace(/\s+/g, '')} #WeekendVibes`
+        `Yo, ${topic} is blowing up in 2025! 🔥 What's your fave part about it? #${topic.replace(/\s+/g, '')} #JustVibing`,
+        `Obsessed with ${topic} lately! Anyone else? Drop your thoughts below! 👇 #${topic.replace(/\s+/g, '')} #ChatTime`,
+        `Just tried a new ${topic} trick and it's 🤯! Wanna know more? DM me! #${topic.replace(/\s+/g, '')} #LifeHacks`,
+        `What's the deal with ${topic}? Spill your tips or hacks! 💯 #${topic.replace(/\s+/g, '')} #CommunityVibes`,
+        `${topic} is my new jam! What's the best resource to dive deeper? #${topic.replace(/\s+/g, '')} #LearnWithMe`
       ];
       break;
       
     case "humorous":
       defaultFormats = [
-        `Tried to become an expert on ${topic} today. My cat was NOT impressed. 😂 #${topic.replace(/\s+/g, '')} #CatJudgment`,
-        `Me explaining ${topic} to my friends: *uses elaborate hand gestures* My friends: *visible confusion* 🤣 #${topic.replace(/\s+/g, '')} #ExplainLikeImFive`,
-        `Pro tip: Never Google ${topic} at 3 AM. Unless you're prepared for an existential crisis and ordering weird stuff online. #${topic.replace(/\s+/g, '')} #InsomniaChoices`,
-        `If ${topic} was a person, it would definitely be that friend who shows up to dinner with a random fact nobody asked for. We still love you though! #${topic.replace(/\s+/g, '')} #RandomThoughts`,
-        `My brain at work: Important deadlines. My brain at 2 AM: *deep dive into ${topic}* #${topic.replace(/\s+/g, '')} #BrainWhy`
+        `Me: I'll master ${topic} in a day. Reality: Googling it at 2 AM like 😵 What's your ${topic} fail? #${topic.replace(/\s+/g, '')} #LOL`,
+        `${topic} experts be like: "It's simple!" Me: *staring at 47 tabs* 🙃 Thoughts? #${topic.replace(/\s+/g, '')} #Relatable`,
+        `Tried ${topic} and now I'm basically a pro… or a disaster. 🤔 Which is it? #${topic.replace(/\s+/g, '')} #SendHelp`,
+        `If ${topic} was a movie, it'd be a comedy of errors. What's your funniest ${topic} moment? #${topic.replace(/\s+/g, '')} #Humor`,
+        `${topic} at 9 AM: Easy. ${topic} at midnight: Why do I exist? 😅 Share your story! #${topic.replace(/\s+/g, '')} #LateNightStruggles`
       ];
       break;
       
     case "inspirational":
       defaultFormats = [
-        `Your journey with ${topic} doesn't define your destination, but it reveals the strength of your character along the way. Keep pushing forward! #${topic.replace(/\s+/g, '')} #NeverGiveUp`,
-        `The greatest achievements in ${topic} weren't built on success, but on the lessons learned through failure and persistence. Your breakthrough awaits! #${topic.replace(/\s+/g, '')} #BelieveInYourself`,
-        `When the path seems unclear, let your passion for ${topic} be your guiding light. The world needs your unique perspective. #${topic.replace(/\s+/g, '')} #FindYourPath`,
-        `The seeds of greatness in ${topic} are planted in the soil of daily habits. What small step can you take today? #${topic.replace(/\s+/g, '')} #DailyProgress`,
-        `Sometimes the greatest discoveries about ${topic} come when you're brave enough to venture beyond your comfort zone. What will you discover today? #${topic.replace(/\s+/g, '')} #EmbraceGrowth`
+        `Your ${topic} journey starts with one step in 2025. What's yours? Keep going! ✨ #${topic.replace(/\s+/g, '')} #Motivation`,
+        `Dream big with ${topic}! Every challenge is a chance to grow. What's your next move? #${topic.replace(/\s+/g, '')} #Inspire`,
+        `${topic} isn't just a skill—it's your path to impact. Start today! 🌟 #${topic.replace(/\s+/g, '')} #2025Goals`,
+        `The future of ${topic} is yours to shape. What's one goal you're chasing? #${topic.replace(/\s+/g, '')} #DreamBig`,
+        `Small wins in ${topic} lead to big breakthroughs. What's your win today? 🏆 #${topic.replace(/\s+/g, '')} #KeepPushing`
       ];
       break;
       
     case "informative":
       defaultFormats = [
-        `Did you know? Recent studies on ${topic} indicate that 73% of participants experienced significant improvements after implementing these evidence-based strategies. #${topic.replace(/\s+/g, '')} #FactBased`,
-        `The history of ${topic} dates back to the early 2000s, with significant evolutions occurring in response to technological advancements and changing user needs. #${topic.replace(/\s+/g, '')} #HistoricalContext`,
-        `When examining ${topic}, it's important to consider these 3 key factors: 1) Contextual variables 2) Implementation methodology 3) Evaluation metrics #${topic.replace(/\s+/g, '')} #DeepDive`,
-        `A comparative analysis of ${topic} across different industries reveals consistent patterns of adoption, with healthcare and finance leading implementation rates. #${topic.replace(/\s+/g, '')} #DataAnalysis`,
-        `The relationship between ${topic} and productivity has been well-documented in peer-reviewed research, suggesting a correlation coefficient of 0.68 in controlled studies. #${topic.replace(/\s+/g, '')} #Research`
+        `Did you know? ${topic} grew 42% in 2024! Here's why it matters: [link] #${topic.replace(/\s+/g, '')} #Facts`,
+        `3 key ${topic} stats for 2025: 1) Growth 2) Adoption 3) Impact. Which surprises you? #${topic.replace(/\s+/g, '')} #Data`,
+        `How ${topic} works: A quick breakdown for beginners. Check it out: [link] #${topic.replace(/\s+/g, '')} #Learn`,
+        `Recent study on ${topic} shows 70% efficiency gains. Thoughts? #${topic.replace(/\s+/g, '')} #Research`,
+        `${topic} 101: 5 facts to know for 2025. What's new to you? #${topic.replace(/\s+/g, '')} #Knowledge [chart]`
       ];
       break;
     
     case "controversial":
       defaultFormats = [
-        `Unpopular opinion: Most "experts" on ${topic} have never actually implemented it successfully. Change my mind. #${topic.replace(/\s+/g, '')} #HotTake`,
-        `Why is nobody talking about how ${topic} is fundamentally changing our society - and not necessarily for the better? #${topic.replace(/\s+/g, '')} #ThinkCritically`,
-        `The mainstream narrative about ${topic} conveniently ignores these 5 uncomfortable truths that challenge the status quo. Thread 🧵 #${topic.replace(/\s+/g, '')} #ReThink`,
-        `I said it before and I'll say it again: The conventional approach to ${topic} is fundamentally broken and we need to start over. #${topic.replace(/\s+/g, '')} #DisruptiveThinking`,
-        `The real reason most people fail with ${topic} isn't what you think - and industry leaders are keeping it hidden for their own benefit. #${topic.replace(/\s+/g, '')} #TruthBomb`
+        `Unpopular opinion: ${topic} is overhyped in 2025. Change my mind! 👀 #${topic.replace(/\s+/g, '')} #HotTake`,
+        `Is ${topic} saving or ruining the industry? Let's argue! 🔥 #${topic.replace(/\s+/g, '')} #Debate`,
+        `Why ${topic} might fail by 2026. Agree or disagree? Drop your take! #${topic.replace(/\s+/g, '')} #Controversy`,
+        `The dark side of ${topic} nobody talks about. What's your view? #${topic.replace(/\s+/g, '')} #RealTalk`,
+        `${topic} is divisive—love it or hate it? Spill the tea! ☕ #${topic.replace(/\s+/g, '')} #BoldOpinions`
       ];
       break;
       
     default:
       defaultFormats = [
-        `Just discovered the most amazing insight about ${topic}! This changes everything we thought we knew about it. #MindBlown #${topic.replace(/\s+/g, '')}`,
-        `5 things nobody tells you about ${topic} that could save you hours of time: 1) Start with research 2) Ask experts 3) Test assumptions 4) Iterate quickly 5) Share your results #${topic.replace(/\s+/g, '')}Tips`,
-        `I spent 30 days deeply focused on ${topic} and the results were shocking! Here's what I learned and why it matters to you... #PersonalGrowth #${topic.replace(/\s+/g, '')}`,
-        `The untold story of ${topic} that experts don't want you to know. I've researched this extensively and found some surprising facts. Thread 🧵 #${topic.replace(/\s+/g, '')}`,
-        `How ${topic} completely changed my perspective on life and business. The lessons I learned will stay with me forever. #GameChanger #${topic.replace(/\s+/g, '')}`
+        `What's new with ${topic} in 2025? Here's the latest scoop! [link] #${topic.replace(/\s+/g, '')} #Trends`,
+        `Just discovered ${topic}! What's one tip you'd share? 💡 #${topic.replace(/\s+/g, '')} #LearnTogether`,
+        `Why is ${topic} trending? Let's unpack it! Share your thoughts. #${topic.replace(/\s+/g, '')} #WhatsHot`,
+        `Top ${topic} hack for 2025: [Quick tip]. Got a better one? #${topic.replace(/\s+/g, '')} #Tips`,
+        `${topic} is changing fast! What's the future look like? 🔮 #${topic.replace(/\s+/g, '')} #FutureTrends`
       ];
   }
   
