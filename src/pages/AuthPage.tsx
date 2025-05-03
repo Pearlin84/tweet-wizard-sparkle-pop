@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Twitter, Eye, EyeOff, Mail } from "lucide-react";
+import { Twitter, Eye, EyeOff, Mail, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -172,10 +173,17 @@ const AuthPage = () => {
   return (
     <div className="flex min-h-[calc(100vh-180px)] items-center justify-center p-4 md:p-8">
       <Card className="w-full max-w-md p-6 shadow-lg border-tweet-purple/30">
-        <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-tweet-purple relative">
-          <Twitter className="h-6 w-6 text-white" />
-          <span className="absolute text-xs font-bold text-white">X</span>
-          <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm -z-10"></div>
+        <div className="flex justify-between items-center mb-6">
+          <Link to="/" className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            <span>Back to home</span>
+          </Link>
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-tweet-purple relative">
+            <Twitter className="h-6 w-6 text-white" />
+            <span className="absolute text-xs font-bold text-white">X</span>
+            <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm -z-10"></div>
+          </div>
+          <div className="w-24"></div> {/* This empty div helps center the logo */}
         </div>
         
         <h1 className="mb-8 text-center text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
