@@ -32,9 +32,11 @@ const Header = () => {
             <span className="absolute text-xs font-bold top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">X</span>
             <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm animate-pulse-light -z-10"></div>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
-            TweetMode
-          </h1>
+          <Link to="/">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
+              TweetMode
+            </h1>
+          </Link>
         </div>
         
         <div className="relative flex items-center gap-4">
@@ -68,21 +70,20 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button 
-              variant="outline" 
-              className="rounded-full border-tweet-purple px-6 py-2 font-medium"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-              asChild
-            >
-              <Link to="/auth">Sign In</Link>
-            </Button>
-          )}
-          
-          {showTooltip && !user && (
-            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-card px-4 py-2 rounded-lg shadow-lg border border-border animate-fade-in z-10">
-              <span className="text-sm">Create an account!</span>
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-card border-b border-r border-border rotate-45"></div>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                className="rounded-full border-tweet-purple px-6 py-2 font-medium"
+                asChild
+              >
+                <Link to="/auth">Sign In</Link>
+              </Button>
+              <Button 
+                className="rounded-full bg-tweet-purple hover:bg-tweet-purple/90 px-6 py-2 font-medium"
+                asChild
+              >
+                <Link to="/auth?tab=signup">Sign Up</Link>
+              </Button>
             </div>
           )}
         </div>

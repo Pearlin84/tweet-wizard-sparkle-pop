@@ -1,7 +1,6 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Twitter, Eye, EyeOff, Mail } from "lucide-react";
@@ -46,7 +45,11 @@ type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 const AuthPage = () => {
   const { user, signIn, signUp, resetPassword } = useAuth();
-  const [activeTab, setActiveTab] = useState("signin");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const defaultTab = queryParams.get("tab") === "signup" ? "signup" : "signin";
+  
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
