@@ -13,7 +13,7 @@ const Hero = () => {
         </div>
         
         <h1 className="text-4xl md:text-5xl font-bold mb-6 max-w-3xl mx-auto leading-tight">
-          Create <span className="bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">viral tweets</span> for any topic in seconds
+          Create <span className="bg-gradient-to-r from-tweet-pink via-tweet-purple to-tweet-blue bg-clip-text text-transparent">viral tweets</span> for any topic in seconds
         </h1>
         
         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

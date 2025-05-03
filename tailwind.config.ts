@@ -68,6 +68,7 @@ export default {
 					purple: "#9b87f5",
 					pink: "#FFA7C4",
 					blue: "#33C3F0",
+					neon: "#ff00ff",
 					background: "#f9f4ff",
 					soft: "#f2f0fb",
 				},

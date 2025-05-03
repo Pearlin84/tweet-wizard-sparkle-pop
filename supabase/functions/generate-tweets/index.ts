@@ -20,17 +20,28 @@ serve(async (req) => {
 
   try {
     // Parse request body
-    const { topic, count } = await req.json();
+    const { topic, count, tone = "professional" } = await req.json();
     
-    console.log(`Generating ${count} tweets about "${topic}" with Gemini`);
+    console.log(`Generating ${count} ${tone} tweets about "${topic}" with Gemini`);
 
     if (!googleApiKey) {
       throw new Error('GOOGLE_API_KEY is not set in Supabase secrets');
     }
 
-    // Create the prompt for Gemini
-    const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English. Each tweet should:
+    // Create the prompt for Gemini, now with tone included
+    const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English with a ${tone} tone.
+    
+    For reference, here's how I define each tone:
+    - Professional: Formal, business-oriented content with industry terms and data
+    - Casual: Friendly, conversational, using contractions and emoji
+    - Humorous: Witty, funny, with jokes or puns related to the topic
+    - Inspirational: Uplifting, motivational, encouraging positive action
+    - Informative: Educational, fact-based, sharing knowledge and insights
+    - Controversial: Challenging conventional wisdom, presenting alternative viewpoints
+    
+    Each tweet should:
     - Be unique and different from others
+    - Match the requested ${tone} tone perfectly
     - Include relevant hashtags
     - Be engaging and shareable
     - Be formatted as a numbered list

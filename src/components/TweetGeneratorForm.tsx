@@ -1,20 +1,29 @@
 
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
-import { Search, Send } from 'lucide-react';
+import { Search, Send, Trash2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface TweetGeneratorFormProps {
-  onSubmit: (topic: string, count: number) => Promise<void>;
+  onSubmit: (topic: string, count: number, tone: string) => Promise<void>;
+  onClear: () => void;
   isLoading: boolean;
 }
 
-const TweetGeneratorForm = ({ onSubmit, isLoading }: TweetGeneratorFormProps) => {
+const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorFormProps) => {
   const [topic, setTopic] = useState('');
   const [tweetCount, setTweetCount] = useState(3);
+  const [tone, setTone] = useState('professional');
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +47,7 @@ const TweetGeneratorForm = ({ onSubmit, isLoading }: TweetGeneratorFormProps) =>
       return;
     }
     
-    await onSubmit(topic, tweetCount);
+    await onSubmit(topic, tweetCount, tone);
   };
 
   return (
@@ -51,19 +60,40 @@ const TweetGeneratorForm = ({ onSubmit, isLoading }: TweetGeneratorFormProps) =>
           </div>
           
           <div className="flex flex-col space-y-4">
-            <div>
-              <label htmlFor="tweet-count" className="block text-sm font-medium mb-1">
-                Number of tweets (1-10)
-              </label>
-              <Input 
-                id="tweet-count"
-                type="number"
-                min="1"
-                max="10"
-                value={tweetCount}
-                onChange={(e) => setTweetCount(Number(e.target.value))}
-                className="w-full max-w-[150px] border-2 border-muted focus-visible:ring-tweet-purple"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="tweet-count" className="block text-sm font-medium mb-1">
+                  Number of tweets (1-10)
+                </label>
+                <Input 
+                  id="tweet-count"
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={tweetCount}
+                  onChange={(e) => setTweetCount(Number(e.target.value))}
+                  className="w-full max-w-[150px] border-2 border-muted focus-visible:ring-tweet-purple"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="tweet-tone" className="block text-sm font-medium mb-1">
+                  Tweet tone
+                </label>
+                <Select value={tone} onValueChange={setTone}>
+                  <SelectTrigger className="w-full max-w-[250px] border-2 border-muted focus-visible:ring-tweet-purple">
+                    <SelectValue placeholder="Select tone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="casual">Casual</SelectItem>
+                    <SelectItem value="humorous">Humorous</SelectItem>
+                    <SelectItem value="inspirational">Inspirational</SelectItem>
+                    <SelectItem value="informative">Informative</SelectItem>
+                    <SelectItem value="controversial">Controversial</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             
             <div>
@@ -79,8 +109,25 @@ const TweetGeneratorForm = ({ onSubmit, isLoading }: TweetGeneratorFormProps) =>
               />
             </div>
           </div>
+
+          <div className="text-sm text-muted-foreground p-3 bg-muted/50 rounded-lg">
+            <p className="font-medium text-foreground">Pro Tip:</p> 
+            <p>For better results, be specific with your topic and add context like "for beginners" or "latest trends".</p>
+          </div>
           
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
+            <Button 
+              type="button" 
+              variant="outline"
+              className="rounded-full border-tweet-purple text-tweet-purple font-medium px-6 py-6"
+              onClick={onClear}
+              disabled={isLoading}
+            >
+              <div className="flex items-center gap-2">
+                <Trash2 className="w-4 h-4" />
+                <span>Clear Tweets</span>
+              </div>
+            </Button>
             <Button 
               type="submit" 
               className="rounded-full bg-tweet-purple hover:bg-tweet-purple/90 text-white font-medium px-6 py-6"
