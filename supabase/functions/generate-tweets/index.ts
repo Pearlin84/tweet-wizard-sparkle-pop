@@ -28,9 +28,9 @@ serve(async (req) => {
       throw new Error('GOOGLE_API_KEY is not set in Supabase secrets');
     }
 
-    // Create the prompt for Gemini, now with tone included
-    const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English with a ${tone} tone.
-    
+    // Create a more engaging prompt for Gemini
+    const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English with a ${tone} tone. Ensure that these tweets are amicable to varied age groups of tweeters.
+
     For reference, here's how I define each tone:
     - Professional: Formal, business-oriented content with industry terms and data
     - Casual: Friendly, conversational, using contractions and emoji
@@ -39,11 +39,12 @@ serve(async (req) => {
     - Informative: Educational, fact-based, sharing knowledge and insights
     - Controversial: Challenging conventional wisdom, presenting alternative viewpoints
     
-    Each tweet should:
+    Each tweet MUST:
     - Be unique and different from others
+    - MUST be engaging and shareable 
     - Match the requested ${tone} tone perfectly
-    - Include relevant hashtags
-    - Be engaging and shareable
+    - Include relevant hashtags (at least 2 per tweet)
+    - Be interesting enough to go viral
     - Be formatted as a numbered list
     - Not exceed 280 characters
     - Not include the number in the actual tweet content
@@ -71,7 +72,7 @@ serve(async (req) => {
           }
         ],
         generationConfig: {
-          temperature: 0.7,
+          temperature: 0.8,
           topK: 40,
           topP: 0.95,
           maxOutputTokens: 1024,
@@ -90,13 +91,30 @@ serve(async (req) => {
     const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     console.log('Raw response from Gemini:', contentText);
     
-    // Parse the numbered list of tweets
-    const tweets = contentText
-      .split(/\d+\.\s+/) // Split by numbers followed by dot and space
-      .filter(tweet => tweet.trim().length > 0) // Remove empty entries
-      .map(tweet => tweet.trim()) // Clean up whitespace
-      .filter(tweet => tweet.length <= 280) // Make sure tweets don't exceed 280 chars
-      .slice(0, count); // Limit to requested count
+    // Parse the numbered list of tweets more effectively
+    const tweetRegex = /\d+\.\s+(.*?)(?=\d+\.|$)/gs;
+    let match;
+    const tweets = [];
+    
+    while ((match = tweetRegex.exec(contentText)) !== null && tweets.length < count) {
+      const tweetContent = match[1].trim();
+      if (tweetContent && tweetContent.length <= 280) {
+        tweets.push(tweetContent);
+      }
+    }
+    
+    // If regex parsing didn't work well, fall back to the previous method
+    if (tweets.length === 0) {
+      const fallbackTweets = contentText
+        .split(/\d+\.\s+/) // Split by numbers followed by dot and space
+        .filter(tweet => tweet.trim().length > 0) // Remove empty entries
+        .map(tweet => tweet.trim()) // Clean up whitespace
+        .filter(tweet => tweet.length <= 280); // Make sure tweets don't exceed 280 chars
+      
+      // Ensure we exactly get the requested number of tweets (up to what's available)
+      const availableTweets = fallbackTweets.slice(0, count);
+      tweets.push(...availableTweets);
+    }
     
     console.log(`Successfully generated ${tweets.length} tweets`);
 

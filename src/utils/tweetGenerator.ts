@@ -27,18 +27,18 @@ export const generateTweets = async (topic: string, count: number, tone: string 
     const { data: { user } } = await supabase.auth.getUser();
     const userType = getUserType(user);
     
-    // Apply user limits
-    count = enforceUserLimits(userType, count);
+    // Apply user limits - enforces the correct number of tweets based on user role
+    const allowedCount = enforceUserLimits(userType, count);
     
-    if (count === 0) {
+    if (allowedCount === 0) {
       throw new Error("Tweet generation limit reached");
     }
     
-    console.log(`Requesting ${count} ${tone} tweets about "${topic}" from Edge Function`);
+    console.log(`Requesting ${allowedCount} ${tone} tweets about "${topic}" from Edge Function`);
     
-    // Call the Supabase Edge Function
+    // Call the Supabase Edge Function with the allowed count
     const { data, error } = await supabase.functions.invoke('generate-tweets', {
-      body: { topic, count, tone }
+      body: { topic, count: allowedCount, tone }
     });
     
     if (error) {
@@ -53,7 +53,7 @@ export const generateTweets = async (topic: string, count: number, tone: string 
     
     // Record usage for authenticated users
     if (user) {
-      recordUserUsage(user.id, count);
+      recordUserUsage(user.id, data.tweets.length);
     }
     
     console.log(`Successfully received ${data.tweets.length} tweets from Edge Function`);
@@ -170,71 +170,71 @@ const generateMockTweets = (topic: string, count: number, tone: string = "profes
   switch (tone.toLowerCase()) {
     case "professional":
       defaultFormats = [
-        `${topic} is up 35% in 2025! How will this shape your strategy? Share insights! #${topic.replace(/\s+/g, '')} #BusinessTrends`,
-        `Why is ${topic} critical for 2025? New report reveals key drivers. Check it out: [link] #${topic.replace(/\s+/g, '')} #IndustryInsights`,
-        `Top 3 ${topic} trends for 2025: 1) Innovation 2) Efficiency 3) Scale. Which matters most to you? #${topic.replace(/\s+/g, '')} #ProTips`,
-        `Experts predict ${topic} will transform markets by 2026. Agree or overhyped? #${topic.replace(/\s+/g, '')} #FutureOfBusiness`,
-        `Just dropped: ${topic} guide for professionals. Boost your ROI with these tips! #${topic.replace(/\s+/g, '')} #CareerGrowth [link]`
+        `${topic} is transforming industries in 2025! What's your strategy? #${topic.replace(/\s+/g, '')} #IndustryTrends #BusinessGrowth`,
+        `New insights reveal ${topic} will be key in Q3 2025. Are you prepared? #${topic.replace(/\s+/g, '')} #MarketInsight #StrategicPlanning`,
+        `3 ways ${topic} is disrupting traditional business models: innovation, scalability, and sustainability. Join the conversation! #${topic.replace(/\s+/g, '')} #Innovation #DisruptiveStrategy`,
+        `Latest research shows ${topic} adoption increasing 47% YoY. How is your organization leveraging this trend? #${topic.replace(/\s+/g, '')} #DataDriven #GrowthStrategy`,
+        `Exclusive webinar: Maximizing ROI with ${topic} implementation strategies. Save your spot! #${topic.replace(/\s+/g, '')} #ROIMaximizer #ExpertInsights`,
       ];
       break;
     
     case "casual":
       defaultFormats = [
-        `Yo, ${topic} is blowing up in 2025! 🔥 What's your fave part about it? #${topic.replace(/\s+/g, '')} #JustVibing`,
-        `Obsessed with ${topic} lately! Anyone else? Drop your thoughts below! 👇 #${topic.replace(/\s+/g, '')} #ChatTime`,
-        `Just tried a new ${topic} trick and it's 🤯! Wanna know more? DM me! #${topic.replace(/\s+/g, '')} #LifeHacks`,
-        `What's the deal with ${topic}? Spill your tips or hacks! 💯 #${topic.replace(/\s+/g, '')} #CommunityVibes`,
-        `${topic} is my new jam! What's the best resource to dive deeper? #${topic.replace(/\s+/g, '')} #LearnWithMe`
+        `OMG ${topic} is totally my new obsession! 🤩 Anyone else spending way too much time on this? #${topic.replace(/\s+/g, '')} #NewFave #CantGetEnough`,
+        `Just discovered this amazing ${topic} hack that saved me hours! 🙌 Life-changing stuff! #${topic.replace(/\s+/g, '')} #GameChanger #LifeHack`,
+        `weekend vibes = me + ${topic} + coffee ☕️ What's your perfect combo? #${topic.replace(/\s+/g, '')} #WeekendMood #SimpleJoys`,
+        `That feeling when ${topic} just makes your day better 💯 Who else can relate? Drop a comment! #${topic.replace(/\s+/g, '')} #GoodVibesOnly #ShareYourStory`,
+        `Anyone else staying up way too late exploring ${topic}? 😴 Worth it though! #${topic.replace(/\s+/g, '')} #NightOwl #WorthIt`,
       ];
       break;
       
     case "humorous":
       defaultFormats = [
-        `Me: I'll master ${topic} in a day. Reality: Googling it at 2 AM like 😵 What's your ${topic} fail? #${topic.replace(/\s+/g, '')} #LOL`,
-        `${topic} experts be like: "It's simple!" Me: *staring at 47 tabs* 🙃 Thoughts? #${topic.replace(/\s+/g, '')} #Relatable`,
-        `Tried ${topic} and now I'm basically a pro… or a disaster. 🤔 Which is it? #${topic.replace(/\s+/g, '')} #SendHelp`,
-        `If ${topic} was a movie, it'd be a comedy of errors. What's your funniest ${topic} moment? #${topic.replace(/\s+/g, '')} #Humor`,
-        `${topic} at 9 AM: Easy. ${topic} at midnight: Why do I exist? 😅 Share your story! #${topic.replace(/\s+/g, '')} #LateNightStruggles`
+        `I tried mastering ${topic} yesterday. Today my search history is "how to recover from ${topic} embarrassment" 🙃 #${topic.replace(/\s+/g, '')} #EpicFail #LessonLearned`,
+        `${topic} experts be like "it's simple!" Meanwhile, I'm over here with 37 browser tabs open and questioning my life choices 😂 #${topic.replace(/\s+/g, '')} #TooManyTabs #SendHelp`,
+        `My relationship status with ${topic}: "It's complicated" 🤪 Anyone else in this chaotic situationship? #${topic.replace(/\s+/g, '')} #ItsComplicated #RelationshipStatus`,
+        `Pro tip: Never try ${topic} while eating spicy food. Don't ask how I know this information. 🔥🧯 #${topic.replace(/\s+/g, '')} #LearnFromMyMistakes #SpicyFail`,
+        `My brain at 3am: "Remember that embarrassing thing with ${topic} from 7 years ago?" Thanks, brain. Super helpful. 😑 #${topic.replace(/\s+/g, '')} #BrainWhy #InsomniaThoughts`,
       ];
       break;
       
     case "inspirational":
       defaultFormats = [
-        `Your ${topic} journey starts with one step in 2025. What's yours? Keep going! ✨ #${topic.replace(/\s+/g, '')} #Motivation`,
-        `Dream big with ${topic}! Every challenge is a chance to grow. What's your next move? #${topic.replace(/\s+/g, '')} #Inspire`,
-        `${topic} isn't just a skill—it's your path to impact. Start today! 🌟 #${topic.replace(/\s+/g, '')} #2025Goals`,
-        `The future of ${topic} is yours to shape. What's one goal you're chasing? #${topic.replace(/\s+/g, '')} #DreamBig`,
-        `Small wins in ${topic} lead to big breakthroughs. What's your win today? 🏆 #${topic.replace(/\s+/g, '')} #KeepPushing`
+        `Your journey with ${topic} doesn't have to be perfect—it just needs to be authentic. Start where you are. Use what you have. Do what you can. ✨ #${topic.replace(/\s+/g, '')} #YourJourney #StartToday`,
+        `The challenges you face with ${topic} today are developing the strength you need for tomorrow. Keep pushing forward! 💪 #${topic.replace(/\s+/g, '')} #GrowthMindset #Perseverance`,
+        `Don't wait for the perfect moment with ${topic}—take the moment and make it perfect. Your future self will thank you. ⏱️ #${topic.replace(/\s+/g, '')} #MakeItHappen #NoRegrets`,
+        `In a world of algorithms and automation, your unique approach to ${topic} is your superpower. Embrace what makes you different. 🌟 #${topic.replace(/\s+/g, '')} #EmbraceUnique #YourSuperpower`,
+        `The smallest step toward ${topic} mastery is still moving forward. Celebrate your progress, no matter how small. 🎯 #${topic.replace(/\s+/g, '')} #CelebrateProgress #SmallWins`,
       ];
       break;
       
     case "informative":
       defaultFormats = [
-        `Did you know? ${topic} grew 42% in 2024! Here's why it matters: [link] #${topic.replace(/\s+/g, '')} #Facts`,
-        `3 key ${topic} stats for 2025: 1) Growth 2) Adoption 3) Impact. Which surprises you? #${topic.replace(/\s+/g, '')} #Data`,
-        `How ${topic} works: A quick breakdown for beginners. Check it out: [link] #${topic.replace(/\s+/g, '')} #Learn`,
-        `Recent study on ${topic} shows 70% efficiency gains. Thoughts? #${topic.replace(/\s+/g, '')} #Research`,
-        `${topic} 101: 5 facts to know for 2025. What's new to you? #${topic.replace(/\s+/g, '')} #Knowledge [chart]`
+        `FACT: ${topic} adoption has increased by 72% among industry leaders in 2025. Key drivers: efficiency gains and competitive advantage. #${topic.replace(/\s+/g, '')} #DataInsights #IndustryTrends`,
+        `NEW STUDY: ${topic} implementation reduces operational costs by an average of 31% within the first quarter. Full analysis in thread. #${topic.replace(/\s+/g, '')} #ROIStudy #BusinessEfficiency`,
+        `5 critical ${topic} metrics every professional should track: 1) Engagement 2) Conversion 3) Retention 4) Scalability 5) Integration efficiency. Which do you prioritize? #${topic.replace(/\s+/g, '')} #MetricsMatters #DataDriven`,
+        `The evolution of ${topic}: From niche concept to mainstream necessity. Timeline analysis shows 300% growth since 2023. #${topic.replace(/\s+/g, '')} #TechEvolution #GrowthAnalysis`,
+        `Just released: Comprehensive guide to ${topic} integration with existing systems. Free download in bio. #${topic.replace(/\s+/g, '')} #IntegrationGuide #ExpertResource`,
       ];
       break;
     
     case "controversial":
       defaultFormats = [
-        `Unpopular opinion: ${topic} is overhyped in 2025. Change my mind! 👀 #${topic.replace(/\s+/g, '')} #HotTake`,
-        `Is ${topic} saving or ruining the industry? Let's argue! 🔥 #${topic.replace(/\s+/g, '')} #Debate`,
-        `Why ${topic} might fail by 2026. Agree or disagree? Drop your take! #${topic.replace(/\s+/g, '')} #Controversy`,
-        `The dark side of ${topic} nobody talks about. What's your view? #${topic.replace(/\s+/g, '')} #RealTalk`,
-        `${topic} is divisive—love it or hate it? Spill the tea! ☕ #${topic.replace(/\s+/g, '')} #BoldOpinions`
+        `Hot take: ${topic} is severely overrated in today's market. Change my mind. #${topic.replace(/\s+/g, '')} #UnpopularOpinion #DebateTime`,
+        `The inconvenient truth about ${topic} that industry leaders don't want you to know. Thread 🧵 #${topic.replace(/\s+/g, '')} #TruthBomb #IndustrySecrets`,
+        `Unpopular opinion: ${topic} will be obsolete by 2027. The signs are already here if you're paying attention. #${topic.replace(/\s+/g, '')} #FutureInsight #DisruptionAlert`,
+        `I said what I said: ${topic} creates more problems than it solves. Who else sees through the hype? #${topic.replace(/\s+/g, '')} #BeyondTheHype #RealTalk`,
+        `The ${topic} experiment has failed. Time to admit it and move on to more effective solutions. Thoughts? #${topic.replace(/\s+/g, '')} #HardTruths #NextGenSolutions`,
       ];
       break;
       
     default:
       defaultFormats = [
-        `What's new with ${topic} in 2025? Here's the latest scoop! [link] #${topic.replace(/\s+/g, '')} #Trends`,
-        `Just discovered ${topic}! What's one tip you'd share? 💡 #${topic.replace(/\s+/g, '')} #LearnTogether`,
-        `Why is ${topic} trending? Let's unpack it! Share your thoughts. #${topic.replace(/\s+/g, '')} #WhatsHot`,
-        `Top ${topic} hack for 2025: [Quick tip]. Got a better one? #${topic.replace(/\s+/g, '')} #Tips`,
-        `${topic} is changing fast! What's the future look like? 🔮 #${topic.replace(/\s+/g, '')} #FutureTrends`
+        `${topic} is trending for all the right reasons! Have you explored its potential yet? #${topic.replace(/\s+/g, '')} #TrendAlert #ExploreMore`,
+        `Curious about ${topic}? Here's what you need to know before diving in. #${topic.replace(/\s+/g, '')} #BeginnerTips #StartHere`,
+        `The ${topic} community is growing fast! Join the conversation and connect with fellow enthusiasts. #${topic.replace(/\s+/g, '')} #CommunityGrowth #JoinUs`,
+        `What's your biggest challenge with ${topic}? Share below and let's solve it together! #${topic.replace(/\s+/g, '')} #ProblemSolving #CommunitySupport`,
+        `Discovered an amazing ${topic} resource that's been a game-changer! Link in bio. #${topic.replace(/\s+/g, '')} #MustHave #ResourceShare`,
       ];
   }
   
@@ -243,39 +243,44 @@ const generateMockTweets = (topic: string, count: number, tone: string = "profes
     tweets.push(defaultFormats[i]);
   }
   
-  // If user requested more tweets than we have formats, duplicate with slight variations
+  // If user requested more tweets than we have formats, create more unique variations
   if (count > defaultFormats.length) {
     for (let i = defaultFormats.length; i < count; i++) {
       const baseIndex = i % defaultFormats.length;
       
-      // Create more unique variations by swapping words or adding emojis
+      // Create a more unique variation
       const baseTweet = defaultFormats[baseIndex];
       let newTweet = baseTweet;
       
-      // Add variation to make it more unique
+      // Add variation to make it more unique and engaging
       const variations = [
-        { from: 'Check it out', to: 'See more' },
-        { from: 'Here\'s', to: 'Here is' },
-        { from: 'Amazing', to: 'Incredible' },
-        { from: '!', to: '!!' },
+        { from: 'Check it out', to: 'Must see this' },
+        { from: 'Here\'s', to: 'Just discovered' },
+        { from: 'Amazing', to: 'Mind-blowing' },
+        { from: '!', to: '!! 🔥' },
         { from: 'What\'s', to: 'What is' },
-        { from: 'Thoughts?', to: 'What do you think?' }
+        { from: 'Thoughts?', to: 'What\'s your take?' }
       ];
       
       // Apply a random variation
       const variation = variations[Math.floor(Math.random() * variations.length)];
       newTweet = newTweet.replace(variation.from, variation.to);
       
-      // Add a random emoji if not already present
+      // Add a random engaging emoji if not already present
       if (!newTweet.includes('😀')) {
         const emojis = ['✨', '🚀', '💡', '🔥', '👏', '💪', '🙌', '👍', '🌟', '💯'];
         const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
         newTweet = newTweet.replace('[link]', `[link] ${randomEmoji}`);
       }
       
-      // Ensure tweet is within character limit
+      // Ensure tweet is within character limit and has hashtags
       if (newTweet.length > 280) {
         newTweet = newTweet.substring(0, 277) + '...';
+      }
+      
+      // Make sure there are at least two hashtags
+      if ((newTweet.match(/#/g) || []).length < 2) {
+        newTweet += ` #${topic.replace(/\s+/g, '')}Insights`;
       }
       
       tweets.push(newTweet);
