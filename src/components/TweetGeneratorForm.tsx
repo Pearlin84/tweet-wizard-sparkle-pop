@@ -104,7 +104,7 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
                 id="tweet-topic"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                placeholder="e.g., Product led growth strategies, AI technology trends, Sustainable fashion"
+                placeholder="enter your topic to tweet - e.g., Sustainable fashion, gemini pro ... "
                 className="min-h-[120px] text-lg rounded-xl border-2 border-muted focus-visible:ring-tweet-purple"
               />
             </div>
