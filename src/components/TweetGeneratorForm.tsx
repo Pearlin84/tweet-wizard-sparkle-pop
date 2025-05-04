@@ -109,11 +109,6 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
               />
             </div>
           </div>
-
-          <div className="text-sm text-muted-foreground p-3 bg-muted/50 rounded-lg">
-            <p className="font-medium text-foreground">Pro Tip:</p> 
-            <p>For better results, be specific with your topic and add context like "for beginners" or "latest trends".</p>
-          </div>
           
           <div className="flex justify-end gap-3">
             <Button 
