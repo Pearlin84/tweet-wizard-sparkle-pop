@@ -10,19 +10,63 @@ import { Sparkles, Lock } from 'lucide-react';
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "../integrations/supabase/client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const TweetGenerator = () => {
   const [tweets, setTweets] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
   const [userSegment, setUserSegment] = useState<any>(null);
+  const [useBonusTweets, setUseBonusTweets] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     // Load user segment info when component mounts
     loadUserSegmentInfo();
+    
+    // Check for daily reset on component mount
+    checkForDailyReset();
   }, []);
+
+  const checkForDailyReset = async () => {
+    if (user) {
+      try {
+        const { data: profileData, error } = await supabase
+          .from('profiles')
+          .select('last_reset_date')
+          .eq('id', user.id)
+          .single();
+
+        if (error) throw error;
+
+        // Check if the last reset date is before today
+        const lastResetDate = new Date(profileData.last_reset_date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (lastResetDate < today) {
+          // Reset the generations_used count
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ 
+              generations_used: 0,
+              last_reset_date: new Date().toISOString().split('T')[0]
+            })
+            .eq('id', user.id);
+            
+          if (updateError) throw updateError;
+          
+          toast({
+            title: "Daily limit reset",
+            description: "Your daily tweet generation limit has been reset.",
+          });
+        }
+      } catch (error) {
+        console.error('Error checking for daily reset:', error);
+      }
+    }
+  };
 
   const loadUserSegmentInfo = async () => {
     try {
@@ -64,7 +108,8 @@ const TweetGenerator = () => {
           const { error } = await supabase
             .from('profiles')
             .update({ 
-              generations_used: (userSegment.usageInfo.used + 1) 
+              generations_used: (userSegment.usageInfo.used + 1),
+              bonus_tweets_used: useBonusTweets ? (userSegment.bonusTweetsUsed + 1) : userSegment.bonusTweetsUsed
             })
             .eq('id', user.id);
             
@@ -130,14 +175,16 @@ const TweetGenerator = () => {
   const getGreeting = (type: string) => {
     if (type === 'guest') {
       return "👋 Hello, Explorer! Ready to create some viral content?";
-    } else if (type === 'free') {
-      return "Welcome back! You're all set to create amazing tweets.";
+    } else if (profile?.first_name) {
+      return `Welcome back, ${profile.first_name}! You're all set to create amazing tweets.`;
     } else if (type === 'basic') {
       return "Hello, valued member! Your basic plan gives you plenty of creative power.";
     } else {
       return "Welcome, Pro creator! Unlimited tweet potential at your fingertips.";
     }
   };
+
+  const hasBonusTweets = userSegment?.bonusTweets > 0 && userSegment?.bonusTweetsUsed < userSegment?.bonusTweets;
 
   return (
     <div className="w-full max-w-3xl mx-auto" id="tweet-generator">
@@ -162,6 +209,23 @@ const TweetGenerator = () => {
           </div>
           
           <Progress value={userSegment.usageInfo.percentage} className="h-2 mb-2" />
+          
+          {hasBonusTweets && user && (
+            <div className="flex items-center space-x-2 mt-2 mb-2">
+              <Checkbox 
+                id="use-bonus-tweets" 
+                checked={useBonusTweets} 
+                onCheckedChange={(checked) => setUseBonusTweets(!!checked)}
+                disabled={userSegment.usageInfo.used < userSegment.usageInfo.limit ? false : true}
+              />
+              <label 
+                htmlFor="use-bonus-tweets" 
+                className="text-sm font-medium leading-none cursor-pointer"
+              >
+                Use bonus tweets ({userSegment.bonusTweets - userSegment.bonusTweetsUsed} remaining)
+              </label>
+            </div>
+          )}
           
           <div className="text-sm text-muted-foreground mt-2 mb-2">
             {getUsageDescription(userSegment.type)}

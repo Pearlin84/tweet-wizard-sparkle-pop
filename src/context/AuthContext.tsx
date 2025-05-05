@@ -38,6 +38,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setTimeout(() => {
             fetchUserProfile(currentSession.user.id);
           }, 0);
+          
+          // Transfer guest usage data if this is a new sign up
+          if (event === 'SIGNED_UP') {
+            transferGuestUsage(currentSession.user.id);
+          }
         } else if (event === 'SIGNED_OUT') {
           setProfile(null);
         }
@@ -59,6 +64,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       subscription.unsubscribe();
     };
   }, []);
+
+  const transferGuestUsage = async (userId: string) => {
+    try {
+      // Get guest usage data from localStorage
+      const guestUsage = JSON.parse(localStorage.getItem('guest_usage') || '{"generations": 0, "tweets": 0}');
+      
+      // Update the user's profile with guest usage and add bonus tweets
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          generations_used: guestUsage.generations,
+          bonus_tweets: 10, // Sign-up bonus
+          bonus_tweets_used: 0
+        })
+        .eq('id', userId);
+      
+      if (error) throw error;
+      
+      // Clear guest usage data
+      localStorage.removeItem('guest_usage');
+      localStorage.removeItem('guest_usage_date');
+      
+      toast({
+        title: "Welcome to TweetMode!",
+        description: "You've received 10 bonus tweets as a sign-up gift!",
+      });
+    } catch (error) {
+      console.error('Error transferring guest usage:', error);
+    }
+  };
 
   const fetchUserProfile = async (userId: string) => {
     try {

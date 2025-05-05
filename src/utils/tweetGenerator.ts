@@ -307,7 +307,9 @@ export const getUserSegmentInfo = async (): Promise<{
     limit: number,
     percentage: number
   },
-  upgradeMessage?: string
+  upgradeMessage?: string,
+  bonusTweets?: number,
+  bonusTweetsUsed?: number
 }> => {
   // Check current auth status
   const { data: { user } } = await supabase.auth.getUser();
@@ -316,29 +318,59 @@ export const getUserSegmentInfo = async (): Promise<{
   let used = 0;
   let limit = 0;
   let upgradeMessage = '';
+  let bonusTweets = 0;
+  let bonusTweetsUsed = 0;
   
   if (userType === 'guest') {
     const guestUsage = JSON.parse(localStorage.getItem('guest_usage') || '{"generations": 0, "tweets": 0}');
-    used = guestUsage.tweets;
-    limit = USER_LIMITS.guest.totalLimit;
+    
+    // Check if we need to reset guest usage (daily)
+    const lastUsageDate = localStorage.getItem('guest_usage_date');
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (lastUsageDate !== today && guestUsage.generations > 0) {
+      // Reset guest usage for a new day
+      guestUsage.generations = 0;
+      guestUsage.tweets = 0;
+      localStorage.setItem('guest_usage', JSON.stringify(guestUsage));
+    }
+    
+    // Store today's date for next comparison
+    localStorage.setItem('guest_usage_date', today);
+    
+    used = guestUsage.generations;
+    limit = USER_LIMITS.guest.generationsAllowed;
     upgradeMessage = 'Sign up for free to generate more tweets!';
-  } else if (userType === 'free') {
-    const today = new Date().toISOString().split('T')[0];
-    const dailyUsage = parseInt(localStorage.getItem(`tweets_daily_${today}`) || '0');
-    used = dailyUsage;
-    limit = USER_LIMITS.free.tweetsPerDay;
-    upgradeMessage = 'Upgrade to Basic ($5/mo) for 6x more tweets per day!';
-  } else if (userType === 'basic') {
-    const today = new Date().toISOString().split('T')[0];
-    const dailyUsage = parseInt(localStorage.getItem(`tweets_daily_${today}`) || '0');
-    used = dailyUsage;
-    limit = USER_LIMITS.basic.tweetsPerDay;
-    upgradeMessage = 'Upgrade to Pro ($20/mo) for advanced features!';
-  } else if (userType === 'pro') {
-    const today = new Date().toISOString().split('T')[0];
-    const dailyUsage = parseInt(localStorage.getItem(`tweets_daily_${today}`) || '0');
-    used = dailyUsage;
-    limit = USER_LIMITS.pro.tweetsPerDay;
+  } else {
+    // For authenticated users, get info from Supabase
+    try {
+      const { data: profileData, error } = await supabase
+        .from('profiles')
+        .select('generations_used, total_allowed_generations, bonus_tweets, bonus_tweets_used')
+        .eq('id', user!.id)
+        .single();
+        
+      if (error) throw error;
+      
+      used = profileData.generations_used || 0;
+      
+      if (userType === 'free') {
+        limit = 5;
+        upgradeMessage = 'Upgrade to Basic ($5/mo) for 6x more tweets per day!';
+      } else if (userType === 'basic') {
+        limit = 30;
+        upgradeMessage = 'Upgrade to Pro ($20/mo) for advanced features!';
+      } else if (userType === 'pro') {
+        limit = 100;
+      }
+      
+      // Get bonus tweets info
+      bonusTweets = profileData.bonus_tweets || 0;
+      bonusTweetsUsed = profileData.bonus_tweets_used || 0;
+      
+    } catch (err) {
+      console.error('Error fetching profile data:', err);
+    }
   }
   
   const percentage = Math.min(Math.floor((used / limit) * 100), 100);
@@ -350,6 +382,8 @@ export const getUserSegmentInfo = async (): Promise<{
       limit,
       percentage
     },
-    upgradeMessage: userType !== 'pro' ? upgradeMessage : undefined
+    upgradeMessage: userType !== 'pro' ? upgradeMessage : undefined,
+    bonusTweets,
+    bonusTweetsUsed
   };
 };
