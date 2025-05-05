@@ -20,6 +20,12 @@ const Hero = () => {
               Turn your ideas into engaging, share-worthy content that connects with your audience and drives more interactions
             </p>
             
+            {!user && (
+              <p className="mx-auto max-w-[600px] mt-2 text-tweet-purple text-sm md:text-base font-medium">
+                "Just Exploring? While in guest mode, you can generate tweets twice, with two variations each time! and every day!"
+              </p>
+            )}
+            
             <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
               <Button 
                 asChild

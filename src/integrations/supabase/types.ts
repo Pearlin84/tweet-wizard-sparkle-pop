@@ -12,24 +12,39 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          email_id: string | null
           first_name: string
+          generations_used: number
           id: string
           last_name: string
+          last_reset_date: string
+          total_allowed_generations: number
           updated_at: string
+          user_type: string
         }
         Insert: {
           created_at?: string
+          email_id?: string | null
           first_name: string
+          generations_used?: number
           id: string
           last_name: string
+          last_reset_date?: string
+          total_allowed_generations?: number
           updated_at?: string
+          user_type?: string
         }
         Update: {
           created_at?: string
+          email_id?: string | null
           first_name?: string
+          generations_used?: number
           id?: string
           last_name?: string
+          last_reset_date?: string
+          total_allowed_generations?: number
           updated_at?: string
+          user_type?: string
         }
         Relationships: []
       }
@@ -38,7 +53,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      reset_daily_generations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

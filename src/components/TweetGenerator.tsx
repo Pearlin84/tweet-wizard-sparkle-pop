@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Lock } from 'lucide-react';
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { supabase } from "../integrations/supabase/client";
 
 const TweetGenerator = () => {
   const [tweets, setTweets] = useState<string[]>([]);
@@ -56,6 +57,22 @@ const TweetGenerator = () => {
       
       setTweets(generatedTweets);
       setHasGenerated(true);
+      
+      // Update usage tracking in Supabase if the user is authenticated
+      if (user) {
+        try {
+          const { error } = await supabase
+            .from('profiles')
+            .update({ 
+              generations_used: (userSegment.usageInfo.used + 1) 
+            })
+            .eq('id', user.id);
+            
+          if (error) throw error;
+        } catch (err) {
+          console.error('Error updating user generation count:', err);
+        }
+      }
       
       // Refresh user segment info after generation
       loadUserSegmentInfo();
@@ -110,11 +127,29 @@ const TweetGenerator = () => {
     }
   };
 
+  const getGreeting = (type: string) => {
+    if (type === 'guest') {
+      return "👋 Hello, Explorer! Ready to create some viral content?";
+    } else if (type === 'free') {
+      return "Welcome back! You're all set to create amazing tweets.";
+    } else if (type === 'basic') {
+      return "Hello, valued member! Your basic plan gives you plenty of creative power.";
+    } else {
+      return "Welcome, Pro creator! Unlimited tweet potential at your fingertips.";
+    }
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto" id="tweet-generator">
       {/* User segment info */}
       {userSegment && (
         <div className="mb-6 p-4 border border-muted rounded-lg bg-card/50">
+          <div className="mb-3">
+            <p className="text-sm font-medium text-tweet-purple">
+              {getGreeting(userSegment.type)}
+            </p>
+          </div>
+          
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-medium">
               {userSegment.type === 'guest' ? 'Guest' : 
