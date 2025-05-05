@@ -42,13 +42,14 @@ serve(async (req) => {
     Each tweet MUST:
     - Be unique and different from others
     - Be engaging and creative
-    - Be conversable 
+    - Be conversable and ask conversation setting questions
     - Match the requested ${tone} tone perfectly
-    - Include relevant hashtags (at least 2 per tweet)
+    - Include relevant hashtags (at least 3 per tweet)
     - Be interesting enough to go viral
-    - Be formatted as a numbered list
+    - Be formatted as a numbered list 
     - Not exceed 280 characters
     - Not include the number in the actual tweet content
+  
     
     Format: 
     1. [First tweet content]
