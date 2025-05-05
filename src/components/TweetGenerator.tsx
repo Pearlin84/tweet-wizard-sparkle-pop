@@ -7,6 +7,8 @@ import { generateTweets, getUserSegmentInfo } from '../utils/tweetGenerator';
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Lock } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const TweetGenerator = () => {
   const [tweets, setTweets] = useState<string[]>([]);
@@ -14,6 +16,7 @@ const TweetGenerator = () => {
   const [hasGenerated, setHasGenerated] = useState(false);
   const [userSegment, setUserSegment] = useState<any>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   useEffect(() => {
     // Load user segment info when component mounts
@@ -95,8 +98,20 @@ const TweetGenerator = () => {
     }
   };
 
+  const getUsageDescription = (type: string) => {
+    if (type === 'guest') {
+      return "In guest mode, you can only generate 2 times and only 2 tweet variations per generation.";
+    } else if (type === 'free') {
+      return "As a free user, you can generate tweets 5 times with 2 tweet variations per generation.";
+    } else if (type === 'basic') {
+      return "As a basic user, you can generate up to 30 tweets per day.";
+    } else {
+      return "As a pro user, you can generate up to 100 tweets per day.";
+    }
+  };
+
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto" id="tweet-generator">
       {/* User segment info */}
       {userSegment && (
         <div className="mb-6 p-4 border border-muted rounded-lg bg-card/50">
@@ -113,12 +128,23 @@ const TweetGenerator = () => {
           
           <Progress value={userSegment.usageInfo.percentage} className="h-2 mb-2" />
           
+          <div className="text-sm text-muted-foreground mt-2 mb-2">
+            {getUsageDescription(userSegment.type)}
+          </div>
+          
           {userSegment.upgradeMessage && (
             <div className="flex justify-between items-center mt-2">
               <p className="text-sm text-muted-foreground">{userSegment.upgradeMessage}</p>
-              <Button size="sm" variant="default" className="bg-tweet-purple hover:bg-tweet-purple/90">
-                <Sparkles className="mr-2 h-4 w-4" />
-                <span>Upgrade</span>
+              <Button 
+                size="sm" 
+                variant="default" 
+                className="bg-tweet-purple hover:bg-tweet-purple/90"
+                asChild
+              >
+                <Link to={userSegment.type === 'guest' ? "/auth" : "/upgrade"}>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  <span>{userSegment.type === 'guest' ? "Sign Up" : "Upgrade"}</span>
+                </Link>
               </Button>
             </div>
           )}

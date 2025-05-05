@@ -2,8 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Send, Sparkles, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const Hero = () => {
+  const { user } = useAuth();
+  
   return (
     <section className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-900/70 relative">
       <div className="container px-4 md:px-6">
@@ -34,10 +37,17 @@ const Hero = () => {
                 variant="outline" 
                 className="gap-2 px-8 py-6 rounded-full border-tweet-purple text-tweet-purple hover:bg-tweet-purple/10"
               >
-                <Link to="/auth">
-                  <Sparkles className="w-5 h-5" />
-                  <span>Sign Up</span>
-                </Link>
+                {user ? (
+                  <Link to="/upgrade">
+                    <Sparkles className="w-5 h-5" />
+                    <span>Upgrade</span>
+                  </Link>
+                ) : (
+                  <Link to="/auth">
+                    <Sparkles className="w-5 h-5" />
+                    <span>Sign Up</span>
+                  </Link>
+                )}
               </Button>
             </div>
             
