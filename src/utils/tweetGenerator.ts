@@ -31,6 +31,7 @@ export const generateTweets = async (topic: string, count: number, tone: string 
     const allowedCount = enforceUserLimits(userType, count);
     
     if (allowedCount === 0) {
+      console.log("User has reached their tweet generation limit");
       throw new Error("Tweet generation limit reached");
     }
     
@@ -60,7 +61,15 @@ export const generateTweets = async (topic: string, count: number, tone: string 
     return data.tweets;
   } catch (error) {
     console.error("Error generating tweets:", error);
-    // Fallback to mock implementation if the edge function fails
+    
+    // Only use mock tweets if there was an actual API error, not a limits error
+    if (error instanceof Error && error.message === "Tweet generation limit reached") {
+      // Re-throw limit errors to be handled by the component
+      throw error;
+    }
+    
+    // Fallback to mock implementation ONLY if there was an actual API error
+    console.log("Falling back to mock tweet generator due to API error");
     return generateMockTweets(topic, count, tone);
   }
 };

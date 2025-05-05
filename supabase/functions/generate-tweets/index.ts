@@ -28,7 +28,7 @@ serve(async (req) => {
       throw new Error('GOOGLE_API_KEY is not set in Supabase secrets');
     }
 
-    // Create a more engaging prompt for Gemini
+    // Create a more engaging prompt for Gemini - improved to get more viral content
     const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English with a ${tone} tone. Ensure that these tweets are amicable to varied age groups of tweeters.
 
     For reference, here's how I define each tone:
@@ -72,7 +72,7 @@ serve(async (req) => {
           }
         ],
         generationConfig: {
-          temperature: 0.8,
+          temperature: 0.9, // Higher temperature for more creative tweets
           topK: 40,
           topP: 0.95,
           maxOutputTokens: 1024,
