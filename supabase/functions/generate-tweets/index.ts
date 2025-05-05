@@ -41,7 +41,8 @@ serve(async (req) => {
     
     Each tweet MUST:
     - Be unique and different from others
-    - MUST be engaging and shareable 
+    - Be engaging and creative
+    - Be conversable 
     - Match the requested ${tone} tone perfectly
     - Include relevant hashtags (at least 2 per tweet)
     - Be interesting enough to go viral
@@ -72,9 +73,9 @@ serve(async (req) => {
           }
         ],
         generationConfig: {
-          temperature: 0.9, // Higher temperature for more creative tweets
+          temperature: 0.5, // Higher temperature for more creative tweets
           topK: 40,
-          topP: 0.95,
+          topP: 0.80,
           maxOutputTokens: 1024,
         },
       }),
