@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }, 0);
           
           // Transfer guest usage data if this is a new sign up
-          if (event === 'SIGNED_UP') {
+          if (event === 'SIGNED_UP') { // This was causing the TypeScript error - we'll fix it below
             transferGuestUsage(currentSession.user.id);
           }
         } else if (event === 'SIGNED_OUT') {

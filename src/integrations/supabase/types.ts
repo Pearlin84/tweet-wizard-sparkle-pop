@@ -11,6 +11,8 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          bonus_tweets: number
+          bonus_tweets_used: number
           created_at: string
           email_id: string | null
           first_name: string
@@ -23,6 +25,8 @@ export type Database = {
           user_type: string
         }
         Insert: {
+          bonus_tweets?: number
+          bonus_tweets_used?: number
           created_at?: string
           email_id?: string | null
           first_name: string
@@ -35,6 +39,8 @@ export type Database = {
           user_type?: string
         }
         Update: {
+          bonus_tweets?: number
+          bonus_tweets_used?: number
           created_at?: string
           email_id?: string | null
           first_name?: string

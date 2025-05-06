@@ -344,7 +344,7 @@ export const getUserSegmentInfo = async (): Promise<{
   } else {
     // For authenticated users, get info from Supabase
     try {
-      const { data: profileData, error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('generations_used, total_allowed_generations, bonus_tweets, bonus_tweets_used')
         .eq('id', user!.id)
@@ -352,21 +352,24 @@ export const getUserSegmentInfo = async (): Promise<{
         
       if (error) throw error;
       
-      used = profileData.generations_used || 0;
-      
-      if (userType === 'free') {
-        limit = 5;
-        upgradeMessage = 'Upgrade to Basic ($5/mo) for 6x more tweets per day!';
-      } else if (userType === 'basic') {
-        limit = 30;
-        upgradeMessage = 'Upgrade to Pro ($20/mo) for advanced features!';
-      } else if (userType === 'pro') {
-        limit = 100;
+      // Fix the TypeScript error by checking if data is available before accessing properties
+      if (data) {
+        used = data.generations_used || 0;
+        
+        if (userType === 'free') {
+          limit = 5;
+          upgradeMessage = 'Upgrade to Basic ($5/mo) for 6x more tweets per day!';
+        } else if (userType === 'basic') {
+          limit = 30;
+          upgradeMessage = 'Upgrade to Pro ($20/mo) for advanced features!';
+        } else if (userType === 'pro') {
+          limit = 100;
+        }
+        
+        // Get bonus tweets info
+        bonusTweets = data.bonus_tweets || 0;
+        bonusTweetsUsed = data.bonus_tweets_used || 0;
       }
-      
-      // Get bonus tweets info
-      bonusTweets = profileData.bonus_tweets || 0;
-      bonusTweetsUsed = profileData.bonus_tweets_used || 0;
       
     } catch (err) {
       console.error('Error fetching profile data:', err);
