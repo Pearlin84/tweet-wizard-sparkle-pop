@@ -22,6 +22,13 @@ const Header = () => {
     }
     return user?.email?.charAt(0).toUpperCase() || 'U';
   };
+
+  const getDisplayName = () => {
+    if (profile?.first_name) {
+      return profile.first_name;
+    }
+    return user?.email?.split('@')[0] || 'User';
+  };
   
   return (
     <header className="w-full py-6">
@@ -56,7 +63,7 @@ const Header = () => {
                   <p className="text-sm font-medium">
                     {profile?.first_name && profile?.last_name 
                       ? `${profile.first_name} ${profile.last_name}` 
-                      : user.email}
+                      : `Welcome ${getDisplayName()}!`}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 </div>
@@ -81,6 +88,7 @@ const Header = () => {
               <Button 
                 className="rounded-full bg-tweet-purple hover:bg-tweet-purple/90 px-6 py-2 font-medium"
                 asChild
+                onClick={() => localStorage.setItem('is_signup', 'true')}
               >
                 <Link to="/auth?tab=signup">Sign Up</Link>
               </Button>
