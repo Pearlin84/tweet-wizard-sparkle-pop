@@ -46,54 +46,65 @@ const Header = () => {
           </Link>
         </div>
         
-        <div className="relative flex items-center gap-4">
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative rounded-full h-10 w-10 p-0">
-                  <Avatar className="h-10 w-10 border-2 border-tweet-purple">
-                    <AvatarFallback className="bg-accent text-accent-foreground">
-                      {getInitials()}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <div className="p-2 text-center border-b">
-                  <p className="text-sm font-medium">
-                    {profile?.first_name && profile?.last_name 
-                      ? `${profile.first_name} ${profile.last_name}` 
-                      : `Welcome ${getDisplayName()}!`}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                </div>
-                <DropdownMenuItem 
-                  className="cursor-pointer flex items-center gap-2"
-                  onClick={() => signOut()}
+        <div className="flex items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-4">
+            <Link to="/" className="text-gray-700 hover:text-tweet-purple transition">
+              Generate Tweets
+            </Link>
+            <Link to="/tweet-response" className="text-gray-700 hover:text-tweet-purple transition">
+              Respond to Tweets
+            </Link>
+          </nav>
+          
+          <div className="relative flex items-center gap-4">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative rounded-full h-10 w-10 p-0">
+                    <Avatar className="h-10 w-10 border-2 border-tweet-purple">
+                      <AvatarFallback className="bg-accent text-accent-foreground">
+                        {getInitials()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="p-2 text-center border-b">
+                    <p className="text-sm font-medium">
+                      {profile?.first_name && profile?.last_name 
+                        ? `${profile.first_name} ${profile.last_name}` 
+                        : `Welcome ${getDisplayName()}!`}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                  </div>
+                  <DropdownMenuItem 
+                    className="cursor-pointer flex items-center gap-2"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="rounded-full border-tweet-purple px-6 py-2 font-medium"
+                  asChild
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                className="rounded-full border-tweet-purple px-6 py-2 font-medium"
-                asChild
-              >
-                <Link to="/auth">Sign In</Link>
-              </Button>
-              <Button 
-                className="rounded-full bg-tweet-purple hover:bg-tweet-purple/90 px-6 py-2 font-medium"
-                asChild
-                onClick={() => localStorage.setItem('is_signup', 'true')}
-              >
-                <Link to="/auth?tab=signup">Sign Up</Link>
-              </Button>
-            </div>
-          )}
+                  <Link to="/auth">Sign In</Link>
+                </Button>
+                <Button 
+                  className="rounded-full bg-tweet-purple hover:bg-tweet-purple/90 px-6 py-2 font-medium"
+                  asChild
+                  onClick={() => localStorage.setItem('is_signup', 'true')}
+                >
+                  <Link to="/auth?tab=signup">Sign Up</Link>
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>
