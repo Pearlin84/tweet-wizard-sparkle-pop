@@ -256,11 +256,7 @@ const TweetGenerator = () => {
       />
       {hasGenerated && <TweetResultsList tweets={tweets} />}
       
-      <div className="mt-8 p-4 text-sm text-muted-foreground border border-muted rounded-lg">
-        <p className="font-semibold mb-2">Disclaimer:</p>
-        <p>This is an AI-powered tweet generation tool. Always fact-check and verify sources before sharing. Use it responsibly to avoid spreading misinformation or misleading content.</p>
-        <p> ~  PEACE  ~ </p>
-      </div>
+     
     </div>
   );
 };
