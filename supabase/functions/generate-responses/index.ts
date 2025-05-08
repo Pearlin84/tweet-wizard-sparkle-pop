@@ -32,23 +32,26 @@ serve(async (req) => {
 
     Generate responses with a ${tone} tone.
     
-    For reference, here's how I define each tone:
-    - Professional: Formal, business-oriented responses with industry terms
-    - Casual: Friendly, conversational, using contractions and emoji
-    - Humorous: Witty, funny, with jokes or puns related to the tweet
-    - Inspirational: Uplifting, motivational, encouraging positive action
-    - Informative: Educational, fact-based, sharing knowledge and insights
-    - Controversial: Challenging conventional wisdom, presenting alternative viewpoints
+   For reference, here's how I define each tone:
+      - Professional: Formal, authoritative, using industry terms or cultural impact
+      - Casual: Friendly, conversational, with contractions, emojis, and relatable vibes
+      - Humorous: Witty, light-hearted, with cultural references or playful jabs
+      - Inspirational: Uplifting, legacy-driven, rallying action or pride
+      - Informative: Fact-based, sharing impactful or surprising insights
+      - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints 
     
     Each response MUST:
-    - Be unique and different from others
-    - Be engaging and conversational
+    - Be unique and different from others   
+    - Use lively language and questions to spark conversation.
+    - End with an open-ended question to drive replies and shares
     - Match the requested ${tone} tone perfectly
-    - Be appropriate as a direct reply to the tweet
+    - Not include the number in the actual tweet content
+    - Include 3-4 relevant, trending hashtags tied to ${topic} or cultural moments
+    - Be compelling enough to go viral
     - Be formatted as a numbered list
-    - Not exceed 280 characters
-    - Not include the number in the actual response content
-    - Must have a minimum of 2 hashtags
+    - Be 150-200 characters (max 280) to allow retweets
+    - Include 1-2 emojis fitting the tone for visual pop
+    - Be appropriate as a direct reply to the tweet
     
     Format: 
     1. [First response content]
