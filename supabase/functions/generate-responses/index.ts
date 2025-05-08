@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -20,7 +19,7 @@ serve(async (req) => {
 
   try {
     // Parse request body
-    const { tweet, count = 3, tone = "professional" } = await req.json();
+    const { tweet, count = 1, tone = "professional" } = await req.json();
     
     console.log(`Generating ${count} ${tone} responses to tweet: "${tweet}" with Gemini`);
 

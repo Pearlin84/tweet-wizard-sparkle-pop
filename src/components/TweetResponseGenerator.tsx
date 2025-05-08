@@ -12,8 +12,10 @@ import TweetResponsesList from "@/components/TweetResponsesList";
 const TweetResponseGenerator = () => {
   const [originalTweet, setOriginalTweet] = useState('');
   const [tone, setTone] = useState('professional');
-  const [responseCount, setResponseCount] = useState(3);
   const { user } = useAuth();
+  
+  // Set response count based on user status (guest vs authenticated)
+  const responseCount = user ? 2 : 1;
   
   const { 
     generateResponses, 
@@ -76,42 +78,30 @@ const TweetResponseGenerator = () => {
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="tone" className="block text-sm font-medium mb-1">
-                Tone:
-              </label>
-              <select 
-                id="tone" 
-                value={tone}
-                onChange={(e) => setTone(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {toneOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label htmlFor="count" className="block text-sm font-medium mb-1">
-                Number of responses:
-              </label>
-              <select 
-                id="count" 
-                value={responseCount}
-                onChange={(e) => setResponseCount(Number(e.target.value))}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {[1, 2, 3, 5].map((num) => (
-                  <option key={num} value={num}>
-                    {num}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div>
+            <label htmlFor="tone" className="block text-sm font-medium mb-1">
+              Tone:
+            </label>
+            <select 
+              id="tone" 
+              value={tone}
+              onChange={(e) => setTone(e.target.value)}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              {toneOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="text-sm text-muted-foreground">
+            {user ? (
+              <p>You'll receive 2 tweet responses for A/B testing.</p>
+            ) : (
+              <p>Guest users receive 1 tweet response. Sign in for more options!</p>
+            )}
           </div>
           
           <Button 

@@ -1,23 +1,25 @@
-
 import { supabase } from "../integrations/supabase/client";
 import { TweetData, GenerationOptions } from "../types/tweet";
 
 // User segmentation limits
 const USER_LIMITS = {
   guest: {
-    tweetsPerGeneration: 2,
+    tweetsPerGeneration: 1,  // Updated to 1 for guest users
     generationsAllowed: 2,
-    totalLimit: 4
+    totalLimit: 2
   },
   free: {
     tweetsPerDay: 5,
+    tweetsPerGeneration: 2,  // Added to enforce 2 tweets per generation
     tweetsPerMonth: 150
   },
   basic: {
-    tweetsPerDay: 30
+    tweetsPerDay: 30,
+    tweetsPerGeneration: 2  // Added to enforce 2 tweets per generation
   },
   pro: {
-    tweetsPerDay: 100
+    tweetsPerDay: 100,
+    tweetsPerGeneration: 2  // Added to enforce 2 tweets per generation
   }
 };
 
@@ -26,6 +28,14 @@ export const generateTweets = async (topic: string, count: number, tone: string 
     // Check user type and limits
     const { data: { user } } = await supabase.auth.getUser();
     const userType = getUserType(user);
+    
+    // Enforce tweet count limit based on user type (2 for authenticated, 1 for guest)
+    const maxTweetsPerGeneration = userType === 'guest' 
+      ? USER_LIMITS.guest.tweetsPerGeneration 
+      : USER_LIMITS[userType].tweetsPerGeneration;
+    
+    // Override the requested count with our enforced limit
+    count = Math.min(count, maxTweetsPerGeneration);
     
     // Apply user limits - enforces the correct number of tweets based on user role
     const allowedCount = enforceUserLimits(userType, count);
@@ -89,6 +99,14 @@ const getUserType = (user: any): 'guest' | 'free' | 'basic' | 'pro' => {
 
 // Enforce usage limits based on user type
 const enforceUserLimits = (userType: 'guest' | 'free' | 'basic' | 'pro', requestedCount: number): number => {
+  // Enforce max tweets per generation based on user type
+  const maxTweetsPerGeneration = userType === 'guest' 
+    ? USER_LIMITS.guest.tweetsPerGeneration 
+    : USER_LIMITS[userType].tweetsPerGeneration;
+  
+  // Cap the requested count to the max allowed per generation
+  requestedCount = Math.min(requestedCount, maxTweetsPerGeneration);
+  
   if (userType === 'guest') {
     // For guests, check localStorage to track usage
     const guestUsage = JSON.parse(localStorage.getItem('guest_usage') || '{"generations": 0, "tweets": 0}');
@@ -309,7 +327,8 @@ export const getUserSegmentInfo = async (): Promise<{
   },
   upgradeMessage?: string,
   bonusTweets?: number,
-  bonusTweetsUsed?: number
+  bonusTweetsUsed?: number,
+  tweetsPerGeneration?: number
 }> => {
   // Check current auth status
   const { data: { user } } = await supabase.auth.getUser();
@@ -320,6 +339,8 @@ export const getUserSegmentInfo = async (): Promise<{
   let upgradeMessage = '';
   let bonusTweets = 0;
   let bonusTweetsUsed = 0;
+  // Add new field for tweets per generation
+  const tweetsPerGeneration = userType === 'guest' ? 1 : 2;
   
   if (userType === 'guest') {
     const guestUsage = JSON.parse(localStorage.getItem('guest_usage') || '{"generations": 0, "tweets": 0}');
@@ -387,6 +408,7 @@ export const getUserSegmentInfo = async (): Promise<{
     },
     upgradeMessage: userType !== 'pro' ? upgradeMessage : undefined,
     bonusTweets,
-    bonusTweetsUsed
+    bonusTweetsUsed,
+    tweetsPerGeneration
   };
 };
