@@ -31,25 +31,25 @@ serve(async (req) => {
     const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English with a ${tone} tone. Ensure that these tweets are amicable to varied age groups of tweeters.
 
     For reference, here's how I define each tone:
-    - Professional: Formal, business-oriented content with industry terms and data
-    - Casual: Friendly, conversational, using contractions and emoji
-    - Humorous: Witty, funny, with jokes or puns related to the topic
-    - Inspirational: Uplifting, motivational, encouraging positive action
-    - Informative: Educational, fact-based, sharing knowledge and insights
-    - Controversial: Challenging conventional wisdom, presenting alternative viewpoints
+      - Professional: Formal, authoritative, using industry terms or cultural impact
+      - Casual: Friendly, conversational, with contractions, emojis, and relatable vibes
+      - Humorous: Witty, light-hearted, with cultural references or playful jabs
+      - Inspirational: Uplifting, legacy-driven, rallying action or pride
+      - Informative: Fact-based, sharing impactful or surprising insights
+      - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints 
     
     Each tweet MUST:
-    - Be unique and different from others
-    - Be engaging and creative
-    - Be conversable and ask conversation setting questions
+    - Use lively language and questions to spark conversation.
+    - End with an open-ended question to drive replies and shares
     - Match the requested ${tone} tone perfectly
-    - Include relevant hashtags (at least 3 per tweet)
-    - Be interesting enough to go viral
-    - Be formatted as a numbered list 
-    - Not exceed 280 characters
     - Not include the number in the actual tweet content
-  
-    
+    - Include 3-4 relevant, trending hashtags tied to ${topic} or cultural moments
+    - Be compelling enough to go viral, using Boseman-like emotional or cultural hooks (e.g., legacy, unity, heroism)
+    - Be formatted as a numbered list
+    - Be 150-200 characters (max 280) to allow retweets
+    - Include 1-2 emojis fitting the tone for visual pop
+
+sample tweets for inspiration:  
     Format: 
     1. [First tweet content]
     2. [Second tweet content]
