@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import TweetGeneratorForm from './TweetGeneratorForm';
@@ -187,7 +186,7 @@ const TweetGenerator = () => {
   const hasBonusTweets = userSegment?.bonusTweets > 0 && userSegment?.bonusTweetsUsed < userSegment?.bonusTweets;
 
   return (
-    <div className="w-full max-w-3xl mx-auto" id="tweet-generator">
+    <div className="w-full">
       {/* User segment info */}
       {userSegment && (
         <div className="mb-6 p-4 border border-muted rounded-lg bg-card/50">

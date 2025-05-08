@@ -129,3 +129,20 @@ textarea.resize-none {
   min-height: 60px;
   transition: height 0.1s ease;
 }
+
+/* Tab styles for the tweet generator */
+.tweet-tabs .tabs-list {
+  @apply mb-6 bg-muted/50 p-1 rounded-lg;
+}
+
+.tweet-tabs .tab-trigger {
+  @apply py-3 text-sm md:text-base font-medium transition-colors;
+}
+
+.tweet-tabs .tab-trigger[data-state="active"] {
+  @apply bg-primary text-primary-foreground;
+}
+
+.tweet-tabs .tab-content {
+  @apply p-0 mt-6;
+}
