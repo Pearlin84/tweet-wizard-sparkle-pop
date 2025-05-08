@@ -47,15 +47,6 @@ const Header = () => {
         </div>
         
         <div className="flex items-center space-x-4">
-          <nav className="hidden md:flex items-center space-x-4">
-            <Link to="/" className="text-gray-700 hover:text-tweet-purple transition">
-              Generate Tweets
-            </Link>
-            <Link to="/tweet-response" className="text-gray-700 hover:text-tweet-purple transition">
-              Respond to Tweets
-            </Link>
-          </nav>
-          
           <div className="relative flex items-center gap-4">
             {user ? (
               <DropdownMenu>

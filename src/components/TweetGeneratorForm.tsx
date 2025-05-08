@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Sparkles, RefreshCw } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
@@ -38,6 +38,17 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
     
     await onSubmit(topic, tweetCount, tone);
   };
+  
+  // Handle textarea auto-resize
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    setTopic(textarea.value);
+    
+    // Reset height to auto to get the correct scrollHeight
+    textarea.style.height = 'auto';
+    // Set the height to scrollHeight to expand as needed
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
 
   return (
     <Card className="p-6 bg-white/50 backdrop-blur-sm border border-gray-200 shadow-md rounded-xl">
@@ -50,12 +61,13 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
           <label htmlFor="topic" className="block text-sm font-medium mb-1">
             What would you like to tweet about?
           </label>
-          <Input
+          <Textarea
             id="topic"
             value={topic}
-            onChange={(e) => setTopic(e.target.value)}
+            onChange={handleTextareaChange}
             placeholder="Enter a topic or keyword"
-            className="w-full"
+            className="w-full min-h-[60px] resize-none overflow-hidden"
+            rows={1}
           />
         </div>
         

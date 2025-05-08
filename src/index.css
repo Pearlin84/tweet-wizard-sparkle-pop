@@ -123,3 +123,9 @@
   background: radial-gradient(circle at center, theme('colors.tweet.purple/20'), transparent 70%),
               radial-gradient(circle at top right, theme('colors.tweet.blue/20'), transparent 60%);
 }
+
+/* Auto-resizing textarea styles */
+textarea.resize-none {
+  min-height: 60px;
+  transition: height 0.1s ease;
+}

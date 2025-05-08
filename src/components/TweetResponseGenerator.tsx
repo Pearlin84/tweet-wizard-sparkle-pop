@@ -1,9 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, MessageSquare, Copy } from "lucide-react";
+import { Loader2, MessageSquare, RefreshCw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
 import { useGenerateResponse } from "@/hooks/useGenerateResponse";
@@ -21,7 +21,8 @@ const TweetResponseGenerator = () => {
     generateResponses, 
     responses, 
     isGenerating, 
-    error 
+    error,
+    clearResponses 
   } = useGenerateResponse();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,6 +49,17 @@ const TweetResponseGenerator = () => {
     }
   };
   
+  // Handle textarea auto-resize
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    setOriginalTweet(textarea.value);
+    
+    // Reset height to auto to get the correct scrollHeight
+    textarea.style.height = 'auto';
+    // Set the height to scrollHeight to expand as needed
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+  
   const toneOptions = [
     { value: 'professional', label: 'Professional' },
     { value: 'casual', label: 'Casual' },
@@ -56,6 +68,11 @@ const TweetResponseGenerator = () => {
     { value: 'informative', label: 'Informative' },
     { value: 'controversial', label: 'Controversial' }
   ];
+  
+  const handleClear = () => {
+    setOriginalTweet('');
+    clearResponses();
+  };
 
   return (
     <div className="space-y-8">
@@ -72,9 +89,10 @@ const TweetResponseGenerator = () => {
             <Textarea
               id="tweet"
               value={originalTweet}
-              onChange={(e) => setOriginalTweet(e.target.value)}
+              onChange={handleTextareaChange}
               placeholder="Paste the tweet here..."
-              className="min-h-[100px] w-full border-gray-300"
+              className="min-h-[60px] w-full border-gray-300 resize-none overflow-hidden"
+              rows={1}
             />
           </div>
           
@@ -104,23 +122,34 @@ const TweetResponseGenerator = () => {
             )}
           </div>
           
-          <Button 
-            type="submit" 
-            className="w-full bg-tweet-purple hover:bg-tweet-purple/90 text-white"
-            disabled={isGenerating || !originalTweet.trim()}
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <MessageSquare className="mr-2 h-4 w-4" />
-                Generate Responses
-              </>
-            )}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              type="submit" 
+              className="flex-1 bg-tweet-purple hover:bg-tweet-purple/90 text-white"
+              disabled={isGenerating || !originalTweet.trim()}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Generate Responses
+                </>
+              )}
+            </Button>
+            
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={handleClear}
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Clear
+            </Button>
+          </div>
         </form>
       </Card>
       
