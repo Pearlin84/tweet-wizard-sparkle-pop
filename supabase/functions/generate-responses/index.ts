@@ -30,7 +30,7 @@ serve(async (req) => {
     // Create a prompt for Gemini to generate responses
     const prompt = `I need ${count} unique, engaging responses to this tweet: "${tweet}"
 
-    Please generate responses with a ${tone} tone.
+    Generate responses with a ${tone} tone.
     
     For reference, here's how I define each tone:
     - Professional: Formal, business-oriented responses with industry terms
@@ -48,6 +48,7 @@ serve(async (req) => {
     - Be formatted as a numbered list
     - Not exceed 280 characters
     - Not include the number in the actual response content
+    - Must have a minimum of 2 hashtags
     
     Format: 
     1. [First response content]
