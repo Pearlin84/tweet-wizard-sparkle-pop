@@ -95,8 +95,13 @@ const AuthPage = () => {
 
   const onSignUpSubmit = async (values: SignUpValues) => {
     setIsLoading(true);
-    await signUp(values.email, values.password, values.firstName, values.lastName);
+    const { error } = await signUp(values.email, values.password, values.firstName, values.lastName);
     setIsLoading(false);
+    
+    // Only reset form if signup was successful
+    if (!error) {
+      signUpForm.reset();
+    }
   };
 
   const onForgotPasswordSubmit = async (values: ForgotPasswordValues) => {

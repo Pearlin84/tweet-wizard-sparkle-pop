@@ -142,10 +142,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
     try {
+      // Mark this as a signup attempt
+      localStorage.setItem('is_signup', 'true');
+      
       const { error } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}/`,
           data: {
             first_name: firstName,
             last_name: lastName
@@ -154,6 +158,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       
       if (error) {
+        // Clean up signup flag on error
+        localStorage.removeItem('is_signup');
+        
         toast({
           title: "Sign up failed",
           description: error.message,
@@ -168,6 +175,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       return { error: null };
     } catch (error) {
+      // Clean up signup flag on error
+      localStorage.removeItem('is_signup');
       console.error("Sign up error:", error);
       return { error: error as AuthError };
     }
