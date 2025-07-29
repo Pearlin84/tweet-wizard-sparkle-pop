@@ -5,6 +5,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom breakpoint for extra small screens */
+@screen xs {
+  @media (min-width: 475px) {
+    /* xs styles */
+  }
+}
+
 @layer base {
   :root {
     --background: 260 100% 99%;
@@ -94,6 +101,58 @@
 
   body {
     @apply bg-background text-foreground font-poppins;
+    /* Improve text rendering on all devices */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent zoom on mobile inputs */
+    -webkit-text-size-adjust: 100%;
+    /* Improve touch targets */
+    touch-action: manipulation;
+  }
+
+  /* Ensure proper sizing on all devices */
+  html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+
+  *, 
+  *:before, 
+  *:after {
+    box-sizing: inherit;
+  }
+
+  /* Improve focus states for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Better mobile touch targets */
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+    min-height: 44px;
+  }
+
+  @media (max-width: 768px) {
+    button,
+    [role="button"] {
+      min-height: 48px;
+    }
+  }
+
+  /* Prevent iOS zoom on input focus */
+  @media screen and (max-width: 768px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
   }
 }
 

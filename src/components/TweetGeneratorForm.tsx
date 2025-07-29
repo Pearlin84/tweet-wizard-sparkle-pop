@@ -51,9 +51,9 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
       <div>
-        <label htmlFor="topic" className="block text-sm font-medium mb-1">
+        <label htmlFor="topic" className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
           What would you like to tweet about?
         </label>
         <Textarea
@@ -62,20 +62,20 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
           value={topic}
           onChange={handleTextareaChange}
           placeholder="Enter a topic or keyword"
-          className="w-full min-h-[60px] resize-none overflow-hidden"
+          className="w-full min-h-[60px] sm:min-h-[80px] resize-none overflow-hidden text-sm sm:text-base touch-manipulation"
           rows={1}
         />
       </div>
       
       <div>
-        <label htmlFor="tone" className="block text-sm font-medium mb-1">
+        <label htmlFor="tone" className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
           Tone:
         </label>
         <select 
           id="tone" 
           value={tone}
           onChange={(e) => setTone(e.target.value)}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="w-full rounded-md border border-input bg-background px-3 py-2.5 sm:py-3 text-sm sm:text-base min-h-[44px] touch-manipulation"
         >
           {toneOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -85,7 +85,7 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
         </select>
       </div>
       
-      <div className="text-sm text-muted-foreground">
+      <div className="text-xs sm:text-sm text-muted-foreground p-2 sm:p-3 bg-muted/30 rounded-lg">
         {user ? (
           <p>You'll receive 2 tweets for A/B testing.</p>
         ) : (
@@ -93,21 +93,23 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
         )}
       </div>
       
-      <div className="flex gap-2">
+      <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
         <Button 
           type="submit" 
-          className="flex-1 bg-tweet-purple hover:bg-tweet-purple/90"
+          className="flex-1 bg-tweet-purple hover:bg-tweet-purple/90 min-h-[44px] sm:min-h-[48px] text-sm sm:text-base font-medium touch-manipulation"
           disabled={isLoading || !topic.trim()}
         >
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Generating...
+              <Loader2 className="mr-1.5 sm:mr-2 h-4 w-4 animate-spin" />
+              <span className="hidden xs:inline">Generating...</span>
+              <span className="xs:hidden">Loading...</span>
             </>
           ) : (
             <>
-              <Sparkles className="mr-2 h-4 w-4" />
-              Generate Tweets
+              <Sparkles className="mr-1.5 sm:mr-2 h-4 w-4" />
+              <span className="hidden xs:inline">Generate Tweets</span>
+              <span className="xs:hidden">Generate</span>
             </>
           )}
         </Button>
@@ -116,9 +118,11 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
           type="button" 
           variant="outline"
           onClick={onClear}
+          className="xs:w-auto w-full min-h-[44px] sm:min-h-[48px] text-sm sm:text-base font-medium px-4 sm:px-6 touch-manipulation"
         >
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Clear
+          <RefreshCw className="mr-1.5 sm:mr-2 h-4 w-4" />
+          <span className="hidden xs:inline">Clear</span>
+          <span className="xs:hidden">Clear</span>
         </Button>
       </div>
     </form>

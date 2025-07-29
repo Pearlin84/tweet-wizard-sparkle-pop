@@ -176,22 +176,22 @@ const AuthPage = () => {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-180px)] items-center justify-center p-4 md:p-8">
-      <Card className="w-full max-w-md p-6 shadow-lg border-tweet-purple/30">
-        <div className="flex justify-between items-center mb-6">
-          <Link to="/" className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            <span>Back to home</span>
+    <div className="flex min-h-[calc(100vh-120px)] sm:min-h-[calc(100vh-180px)] items-center justify-center p-3 sm:p-4 md:p-8 bg-background">
+      <Card className="w-full max-w-[340px] sm:max-w-md p-4 sm:p-6 shadow-lg border-tweet-purple/30 mx-auto">
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
+          <Link to="/" className="flex items-center text-muted-foreground hover:text-foreground transition-colors touch-manipulation">
+            <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+            <span className="text-xs sm:text-sm">Back to home</span>
           </Link>
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-tweet-purple relative">
-            <Twitter className="h-6 w-6 text-white" />
-            <span className="absolute text-xs font-bold text-white">X</span>
+          <div className="mx-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-tweet-purple relative">
+            <Twitter className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
+            <span className="absolute text-[10px] sm:text-xs font-bold text-white">X</span>
             <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm -z-10"></div>
           </div>
-          <div className="w-24"></div> {/* This empty div helps center the logo */}
+          <div className="w-16 sm:w-24"></div> {/* This empty div helps center the logo */}
         </div>
         
-        <h1 className="mb-8 text-center text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
+        <h1 className="mb-6 sm:mb-8 text-center text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
           Welcome to TweetMode
         </h1>
         
@@ -201,9 +201,9 @@ const AuthPage = () => {
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 h-auto">
+            <TabsTrigger value="signin" className="text-xs sm:text-sm py-2.5 sm:py-3 min-h-[44px] touch-manipulation">Sign In</TabsTrigger>
+            <TabsTrigger value="signup" className="text-xs sm:text-sm py-2.5 sm:py-3 min-h-[44px] touch-manipulation">Sign Up</TabsTrigger>
           </TabsList>
           
           <TabsContent value="signin">
@@ -299,15 +299,20 @@ const AuthPage = () => {
           <TabsContent value="signup">
             <Form {...signUpForm}>
               <form onSubmit={signUpForm.handleSubmit(onSignUpSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                   <FormField
                     control={signUpForm.control}
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>First Name</FormLabel>
+                        <FormLabel className="text-xs sm:text-sm">First Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="First name" {...field} disabled={isLoading} />
+                          <Input 
+                            placeholder="First name" 
+                            {...field} 
+                            disabled={isLoading} 
+                            className="min-h-[44px] text-sm sm:text-base"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -319,9 +324,14 @@ const AuthPage = () => {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Last Name</FormLabel>
+                        <FormLabel className="text-xs sm:text-sm">Last Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Last name" {...field} disabled={isLoading} />
+                          <Input 
+                            placeholder="Last name" 
+                            {...field} 
+                            disabled={isLoading} 
+                            className="min-h-[44px] text-sm sm:text-base"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
