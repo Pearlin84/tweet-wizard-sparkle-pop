@@ -28,7 +28,7 @@ serve(async (req) => {
     }
 
     // Create a more engaging prompt for Gemini - improved to get more viral content
-    const prompt = `Generate ${count} unique, engaging tweets about ${topic} in English with a ${tone} tone. Ensure that these tweets are amicable to varied age groups of tweeters.
+    const prompt = `Generate ${count} unique, engaging tweets about "${topic}" in English with a ${tone} tone. Ensure that these tweets are amicable to varied age groups of tweeters.
 
     For reference, here's how I define each tone:
       - Professional: Formal, authoritative, using industry terms or cultural impact
@@ -39,17 +39,16 @@ serve(async (req) => {
       - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints 
     
     Each tweet MUST:
-    - Use lively language and questions to spark conversation.
+    - Use lively language and questions to spark conversation
     - End with an open-ended question to drive replies and shares
     - Match the requested ${tone} tone perfectly
     - Not include the number in the actual tweet content
-    - Include 3-4 relevant, trending hashtags tied to ${topic} or cultural moments
-    - Be compelling enough to go viral, using Boseman-like emotional or cultural hooks (e.g., legacy, unity, heroism)
+    - Include 3-4 relevant, trending hashtags tied to "${topic}" or cultural moments
+    - Be compelling enough to go viral with emotional or cultural hooks
     - Be formatted as a numbered list
     - Be 150-200 characters (max 280) to allow retweets
     - Include 1-2 emojis fitting the tone for visual pop
 
-sample tweets for inspiration:  
     Format: 
     1. [First tweet content]
     2. [Second tweet content]
