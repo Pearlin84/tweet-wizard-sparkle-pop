@@ -46,7 +46,7 @@ serve(async (req) => {
     - End with an open-ended question to drive replies and shares
     - Match the requested ${tone} tone perfectly
     - Not include the number in the actual tweet content
-    - Include 3-4 relevant, trending hashtags tied to ${topic} or cultural moments
+    - Include 3-4 relevant, trending hashtags tied to the topic or cultural moments
     - Be compelling enough to go viral
     - Be formatted as a numbered list
     - Be 150-200 characters (max 280) to allow retweets
