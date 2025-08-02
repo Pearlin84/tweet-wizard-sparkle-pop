@@ -28,31 +28,32 @@ serve(async (req) => {
     }
 
     // Create a more engaging prompt for Gemini - improved to get more viral content
-    const prompt = `Generate ${count} unique, engaging tweets about "${topic}" in English with a ${tone} tone. Ensure that these tweets are amicable to varied age groups of tweeters.
+    const prompt = `Generate ${count} unique, engaging Twitter posts on the topic: "${topic}" in English with a ${tone} tone, crafted to maximize virality on X and appeal to diverse age groups.
 
-    For reference, here's how I define each tone:
-      - Professional: Formal, authoritative, using industry terms or cultural impact
-      - Casual: Friendly, conversational, with contractions, emojis, and relatable vibes
-      - Humorous: Witty, light-hearted, with cultural references or playful jabs
-      - Inspirational: Uplifting, legacy-driven, rallying action or pride
-      - Informative: Fact-based, sharing impactful or surprising insights
-      - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints 
-    
-    Each tweet MUST:
-    - Use lively language and questions to spark conversation
-    - End with an open-ended question to drive replies and shares
-    - Match the requested ${tone} tone perfectly
-    - Not include the number in the actual tweet content
-    - Include 3-4 relevant, trending hashtags tied to "${topic}" or cultural moments
-    - Be compelling enough to go viral with emotional or cultural hooks
-    - Be formatted as a numbered list
-    - Be 150-200 characters (max 280) to allow retweets
-    - Include 1-2 emojis fitting the tone for visual pop
+**Instructions**:
+- **Content**: Create concise tweets (150-200 characters, max 280) that strictly align with "${topic}" and the ${tone} tone (defined below). Use real-time X trends, cultural references, or timely events related to "${topic}" to boost relevance. Avoid any deviation from the specified topic.
+- **Tone Definitions**:
+  - Professional: Formal, authoritative, using industry-specific terms or cultural impact.
+  - Casual: Friendly, conversational, with contractions, emojis, and relatable vibes.
+  - Humorous: Witty, light-hearted, with cultural references or playful jabs.
+  - Inspirational: Uplifting, motivational, rallying action or pride.
+  - Informative: Fact-based, sharing surprising or impactful insights.
+  - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints.
+- **Requirements**:
+  - Each tweet must be unique, distinct, and strictly relevant to "${topic}".
+  - Use lively, engaging language to spark conversation and emotional connection.
+  - End with an open-ended question to drive replies, retweets, and shares.
+  - Include 5-6 relevant, trending hashtags tied to "${topic}" or current cultural moments (use real-time X trends for hashtag selection).
+  - Include 1-2 emojis matching the tone for visual appeal.
+  - Ensure content is inclusive, appropriate, and avoids spammy or sensitive elements.
+  - Optimize for X algorithm: Prioritize recency, engagement (likes, replies, retweets), and relevance to user interests.
+  - Format as a numbered list (e.g., 1. [Tweet content], 2. [Tweet content]).
+  - Avoid repetitive phrases, overused buzzwords, or off-topic content to maintain authenticity and virality.
 
-    Format: 
-    1. [First tweet content]
-    2. [Second tweet content]
-    etc.`;
+**Format Example**:
+1. [Tweet content with emojis, hashtags, and a question]
+2. [Tweet content with emojis, hashtags, and a question]
+etc.`;
 
     // Make request to Google Gemini API
     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent', {
