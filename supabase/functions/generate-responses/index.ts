@@ -28,35 +28,32 @@ serve(async (req) => {
     }
 
     // Create a prompt for Gemini to generate responses
-    const prompt = `I need ${count} unique, engaging responses to this tweet: "${tweet}"
+   const prompt = `Generate ${count} unique, engaging response tweets to this tweet: "${tweet}" in English with a ${tone} tone, crafted to maximize virality and spark discussion on X, appealing to diverse age groups.
 
-    Generate responses with a ${tone} tone.
-    
-   For reference, here's how I define each tone:
-      - Professional: Formal, authoritative, using industry terms or cultural impact
-      - Casual: Friendly, conversational, with contractions, emojis, and relatable vibes
-      - Humorous: Witty, light-hearted, with cultural references or playful jabs
-      - Inspirational: Uplifting, legacy-driven, rallying action or pride
-      - Informative: Fact-based, sharing impactful or surprising insights
-      - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints 
-    
-    Each response MUST:
-    - Be unique and different from others   
-    - Use lively language and questions to spark conversation.
-    - End with an open-ended question to drive replies and shares
-    - Match the requested ${tone} tone perfectly
-    - Not include the number in the actual tweet content
-    - Include 3-4 relevant, trending hashtags tied to the topic or cultural moments
-    - Be compelling enough to go viral
-    - Be formatted as a numbered list
-    - Be 150-200 characters (max 280) to allow retweets
-    - Include 1-2 emojis fitting the tone for visual pop
-    - Be appropriate as a direct reply to the tweet
-    
-    Format: 
-    1. [First response content]
-    2. [Second response content]
-    etc.`;
+**Instructions**:
+- **Content**: Create concise responses (150-200 characters, max 280) that directly address the content, context, and sentiment of "${tweet}". Incorporate real-time X trends or cultural references related to the tweet’s topic to boost relevance. Ensure responses are strictly relevant to the original tweet.
+- **Tone Definitions**:
+  - Professional: Formal, authoritative, using industry-specific terms or cultural impact.
+  - Casual: Friendly, conversational, with contractions, emojis, and relatable vibes.
+  - Humorous: Witty, light-hearted, with cultural references or playful jabs.
+  - Inspirational: Uplifting, motivational, rallying action or pride.
+  - Informative: Fact-based, sharing surprising or impactful insights.
+  - Controversial: Bold, thought-provoking, challenging norms with balanced viewpoints.
+- **Requirements**:
+  - Each response must be unique, distinct, and directly relevant to "${tweet}".
+  - Use lively, engaging language to spark conversation and emotional connection.
+  - End with an open-ended question to drive replies, retweets, and further discussion.
+  - Include 1-2 relevant hashtags (if applicable) tied to the tweet’s topic or current trends to enhance discoverability, avoiding spammy overuse.
+  - Include 1-2 emojis matching the tone for visual appeal.
+  - Ensure content is inclusive, appropriate, and avoids spammy or sensitive elements.
+  - Optimize for X algorithm: Prioritize engagement (replies, likes, retweets), relevance to the original tweet, and recency.
+  - Format as a numbered list (e.g., 1. [Response content], 2. [Response content]).
+  - Avoid repetitive phrases or off-topic content to maintain authenticity and virality.
+
+**Format Example**:
+1. [Response content with emojis, 1-2 hashtags, and a question]
+2. [Response content with emojis, 1-2 hashtags, and a question]
+etc.`;
 
     // Make request to Google Gemini API
     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent', {
