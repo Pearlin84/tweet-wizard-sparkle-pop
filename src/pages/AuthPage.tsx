@@ -4,13 +4,14 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, useLocation, Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Twitter, Eye, EyeOff, Mail, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import PostQuillLogo from "@/components/PostQuillLogo";
 import { 
   Form, 
   FormControl, 
@@ -183,15 +184,11 @@ const AuthPage = () => {
             <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
             <span className="text-xs sm:text-sm">Back to home</span>
           </Link>
-          <div className="mx-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-tweet-purple relative">
-            <Twitter className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
-            <span className="absolute text-[10px] sm:text-xs font-bold text-white">X</span>
-            <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm -z-10"></div>
-          </div>
+          <PostQuillLogo size="lg" />
           <div className="w-16 sm:w-24"></div> {/* This empty div helps center the logo */}
         </div>
         
-        <h1 className="mb-6 sm:mb-8 text-center text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
+        <h1 className="mb-6 sm:mb-8 text-center text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
           Welcome to PostQuill
         </h1>
         

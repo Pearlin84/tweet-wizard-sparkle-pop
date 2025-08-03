@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
-import { Twitter, User, LogOut } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
+import PostQuillLogo from "@/components/PostQuillLogo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { Link } from "react-router-dom";
@@ -34,13 +35,9 @@ const Header = () => {
     <header className="w-full py-3 sm:py-4 md:py-6 sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto flex justify-between items-center px-3 sm:px-4 md:px-6">
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="bg-tweet-purple rounded-full p-1.5 sm:p-2 animate-pulse-light relative">
-            <Twitter className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-            <span className="absolute text-[8px] sm:text-xs font-bold top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">X</span>
-            <div className="absolute inset-0 bg-tweet-purple rounded-full blur-sm animate-pulse-light -z-10"></div>
-          </div>
+          <PostQuillLogo size="md" className="animate-pulse-light" />
           <Link to="/" className="touch-manipulation">
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               PostQuill
             </h1>
           </Link>

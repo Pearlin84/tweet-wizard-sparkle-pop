@@ -1,15 +1,13 @@
 
-import { Twitter } from 'lucide-react';
+import PostQuillLogo from "@/components/PostQuillLogo";
 
 const Footer = () => {
   return (
     <footer className="w-full py-6 mt-16 border-t border-border">
       <div className="container mx-auto text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="bg-tweet-purple rounded-full p-1">
-            <Twitter className="w-4 h-4 text-white" />
-          </div>
-          <h3 className="text-lg font-semibold text-tweet-purple">PostQuill</h3>
+          <PostQuillLogo size="sm" />
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">PostQuill</h3>
         </div>
         
         <p className="text-sm text-muted-foreground">
