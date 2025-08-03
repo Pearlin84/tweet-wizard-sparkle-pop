@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="bg-tweet-purple rounded-full p-1">
             <Twitter className="w-4 h-4 text-white" />
           </div>
-          <h3 className="text-lg font-semibold text-tweet-purple">TweetMode</h3>
+          <h3 className="text-lg font-semibold text-tweet-purple">PostQuill</h3>
         </div>
         
         <p className="text-sm text-muted-foreground">
@@ -17,7 +17,7 @@ const Footer = () => {
         </p>
         
         <div className="mt-4 text-xs text-muted-foreground">
-          © 2025 TweetMode. A product of LumeMetrics. All rights reserved.
+          © 2025 PostQuill. A product of LumeMetrics. All rights reserved.
         </div>
       </div>
     </footer>

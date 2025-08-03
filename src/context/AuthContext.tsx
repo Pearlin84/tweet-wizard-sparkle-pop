@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('guest_usage_date');
       
       toast({
-        title: "Welcome to TweetMode!",
+        title: "Welcome to PostQuill!",
         description: "You've received 10 bonus tweets as a sign-up gift!",
       });
     } catch (error) {

@@ -41,7 +41,7 @@ const Header = () => {
           </div>
           <Link to="/" className="touch-manipulation">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
-              TweetMode
+              PostQuill
             </h1>
           </Link>
         </div>

@@ -192,7 +192,7 @@ const AuthPage = () => {
         </div>
         
         <h1 className="mb-6 sm:mb-8 text-center text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-tweet-purple to-tweet-blue bg-clip-text text-transparent">
-          Welcome to TweetMode
+          Welcome to PostQuill
         </h1>
         
         <Tabs
