@@ -2,10 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Send, Sparkles, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
 
 const Hero = () => {
-  const { user } = useAuth();
   
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-900/70 relative overflow-hidden">
@@ -20,11 +18,9 @@ const Hero = () => {
               Turn your ideas into engaging, share-worthy content that connects with your audience and drives more interactions
             </p>
             
-            {!user && (
-              <p className="mx-auto max-w-[280px] xs:max-w-[350px] sm:max-w-[500px] md:max-w-[600px] mt-2 text-tweet-purple text-xs sm:text-sm md:text-base font-medium">
-                "Just Exploring? While in guest mode, you can generate tweets twice, with two variations each time! and every day!"
-              </p>
-            )}
+            <p className="mx-auto max-w-[280px] xs:max-w-[350px] sm:max-w-[500px] md:max-w-[600px] mt-2 text-tweet-purple text-xs sm:text-sm md:text-base font-medium">
+              ✨ Create unlimited viral tweets and responses instantly! No sign-up required.
+            </p>
             
             <div className="flex flex-col xs:flex-row justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 px-4 xs:px-0">
               <Button 
@@ -43,17 +39,10 @@ const Hero = () => {
                 variant="outline" 
                 className="gap-2 px-6 sm:px-8 py-4 sm:py-6 rounded-full border-tweet-purple text-tweet-purple hover:bg-tweet-purple/10 text-sm sm:text-base font-medium w-full xs:w-auto min-h-[48px] touch-manipulation"
               >
-                {user ? (
-                  <Link to="/upgrade">
-                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span>Upgrade</span>
-                  </Link>
-                ) : (
-                  <Link to="/auth">
-                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span>Sign Up</span>
-                  </Link>
-                )}
+                <a href="#tweet-generator">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Respond to Tweets</span>
+                </a>
               </Button>
             </div>
             
