@@ -74,3 +74,7 @@ url = ""
 
 [functions]
 [functions.generate-tweets]
+verify_jwt = false
+
+[functions.generate-responses]
+verify_jwt = false

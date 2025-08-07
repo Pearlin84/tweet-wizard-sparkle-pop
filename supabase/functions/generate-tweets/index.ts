@@ -1,8 +1,8 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-// Get the Google API key from Supabase secrets
-const googleApiKey = Deno.env.get('GOOGLE_API_KEY');
+// Get the Gemini API key from Supabase secrets
+const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
 
 // Define CORS headers
 const corsHeaders = {
@@ -23,8 +23,8 @@ serve(async (req) => {
     
     console.log(`Generating ${count} ${tone} tweets about "${topic}" with Gemini`);
 
-    if (!googleApiKey) {
-      throw new Error('GOOGLE_API_KEY is not set in Supabase secrets');
+    if (!geminiApiKey) {
+      throw new Error('GEMINI_API_KEY is not set in Supabase secrets');
     }
 
     // Create a more engaging prompt for Gemini - improved to get more viral content
@@ -60,7 +60,7 @@ etc.`;
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-goog-api-key': googleApiKey,
+        'x-goog-api-key': geminiApiKey,
       },
       body: JSON.stringify({
         contents: [
