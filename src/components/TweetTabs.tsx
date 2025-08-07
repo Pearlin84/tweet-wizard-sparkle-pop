@@ -1,8 +1,8 @@
 
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import TweetGenerator from "@/components/TweetGenerator";
-import TweetResponseGenerator from "@/components/TweetResponseGenerator";
+import TweetGeneratorSimple from "@/components/TweetGeneratorSimple";
+import TweetResponseGeneratorSimple from "@/components/TweetResponseGeneratorSimple";
 import { Sparkles, MessageSquare } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
@@ -37,11 +37,11 @@ const TweetTabs = () => {
           </TabsList>
           
           <TabsContent value="generate" className="mt-0">
-            <TweetGenerator />
+            <TweetGeneratorSimple />
           </TabsContent>
           
           <TabsContent value="respond" className="mt-0">
-            <TweetResponseGenerator />
+            <TweetResponseGeneratorSimple />
           </TabsContent>
         </Tabs>
       </Card>

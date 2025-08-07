@@ -23,9 +23,32 @@ const USER_LIMITS = {
   }
 };
 
-export const generateTweets = async (topic: string, count: number, tone: string = "professional"): Promise<string[]> => {
+export const generateTweets = async (topic: string, count: number, tone: string = "professional", unlimited: boolean = false): Promise<string[]> => {
   try {
-    // Check user type and limits
+    // If unlimited mode, skip all limits and use the requested count
+    if (unlimited) {
+      console.log(`Unlimited mode: Requesting ${count} ${tone} tweets about "${topic}" from Edge Function`);
+      
+      // Call the Supabase Edge Function with the requested count
+      const { data, error } = await supabase.functions.invoke('generate-tweets', {
+        body: { topic, count, tone }
+      });
+      
+      if (error) {
+        console.error("Supabase Edge Function error:", error);
+        throw new Error(`Error calling generate-tweets function: ${error.message}`);
+      }
+      
+      if (!data || !data.tweets || !Array.isArray(data.tweets)) {
+        console.error("Invalid response format:", data);
+        throw new Error("Invalid response format from tweet generation service");
+      }
+      
+      console.log(`Successfully received ${data.tweets.length} tweets from Edge Function`);
+      return data.tweets;
+    }
+    
+    // Original logic for limited mode (kept for backwards compatibility)
     const { data: { user } } = await supabase.auth.getUser();
     const userType = getUserType(user);
     
