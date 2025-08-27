@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Sparkles, RefreshCw } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
 
 interface TweetGeneratorFormProps {
   onSubmit: (topic: string, count: number, tone: string) => Promise<void>;
@@ -14,11 +13,10 @@ interface TweetGeneratorFormProps {
 const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorFormProps) => {
   const [topic, setTopic] = useState('');
   const [tone, setTone] = useState('professional');
-  const { user } = useAuth();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
-  // Set the tweet count based on user status (authenticated vs guest)
-  const tweetCount = user ? 2 : 1;
+  // Always generate 2 tweets for all users (unlimited mode)
+  const tweetCount = 2;
   
   const toneOptions = [
     { value: 'professional', label: 'Professional' },
@@ -86,11 +84,7 @@ const TweetGeneratorForm = ({ onSubmit, onClear, isLoading }: TweetGeneratorForm
       </div>
       
       <div className="text-xs sm:text-sm text-muted-foreground p-2 sm:p-3 bg-muted/30 rounded-lg">
-        {user ? (
-          <p>You'll receive 2 tweets for A/B testing.</p>
-        ) : (
-          <p>Guest users receive 1 tweet. Sign in to get 2 tweets for A/B testing!</p>
-        )}
+        <p>You'll receive 2 tweets for A/B testing and unlimited generations!</p>
       </div>
       
       <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
